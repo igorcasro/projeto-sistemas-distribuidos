@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import dao.BancoDados;
 import dao.UsuarioDAO;
+import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
 
@@ -20,7 +21,7 @@ public class UsuarioService {
 		
 	}
 	
-	public void cadastrar(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
+	public Retorno cadastrar(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
 		
 		Connection conn = BancoDados.conectar();
 		Usuario usuarioRetorno = new UsuarioDAO(conn).buscarUsuario(usuario);
@@ -40,6 +41,9 @@ public class UsuarioService {
 			
 			conn = BancoDados.conectar();
 			new UsuarioDAO(conn).cadastrar(usuario);
+			Retorno retorno = new Retorno();
+			retorno.setCodigo(200);
+			return retorno;
 		} else {
 			
 			throw new GeneralErrorException("Usuário já cadastrado.");
@@ -48,7 +52,7 @@ public class UsuarioService {
 
 	}
 	
-	public Usuario logar(Usuario usuario) throws SQLException, IOException, GeneralErrorException{
+	public Retorno logar(Usuario usuario) throws SQLException, IOException, GeneralErrorException{
 		
 		Connection conn = BancoDados.conectar();
 		List<Usuario> listaUsuarios = new UsuarioDAO(conn).buscarTodos();
@@ -58,7 +62,6 @@ public class UsuarioService {
 		if(!listaUsuarios.isEmpty()) {
 			
 			for (Usuario usuariosRecuperados : listaUsuarios) {
-				System.out.println(usuariosRecuperados);
 				if(usuariosRecuperados.getEmail().equals(usuario.getEmail())) {	
 					if(usuariosRecuperados.getSenha().equals(usuario.getSenha())) {
 						if(usuariosRecuperados.getToken() == null) {
@@ -67,11 +70,17 @@ public class UsuarioService {
 							usuario.setToken(token);
 							
 							conn = BancoDados.conectar();
-							new UsuarioDAO(conn).logarDeslogarUsuario(usuario);
+							new UsuarioDAO(conn).logarUsuario(usuario);
 							
 							conn = BancoDados.conectar();
 							Usuario usuarioLogado = new UsuarioDAO(conn).buscarUsuario(usuario);
-							return usuarioLogado;
+							
+							Retorno retorno = new Retorno();
+							retorno.setCodigo(200);
+							retorno.setToken(usuarioLogado.getToken());
+							retorno.setId_usuario(usuarioLogado.getId_usuario());
+							
+							return retorno;
 						} else {
 							throw new GeneralErrorException("Usuário já está logado.");
 						}
@@ -95,34 +104,35 @@ public class UsuarioService {
 		
 	}
 	
-	public void deslogar(Usuario usuario) throws SQLException, IOException, GeneralErrorException{
+	public Retorno deslogar(Usuario usuario) throws SQLException, IOException, GeneralErrorException{
 		
 		Connection conn = BancoDados.conectar();
 		List<Usuario> listaUsuarios = new UsuarioDAO(conn).buscarTodos();
 		
 		int contador = 0;
 		if(!listaUsuarios.isEmpty()) {
-			
 			for (Usuario usuariosRecuperados : listaUsuarios) {
-				if(usuariosRecuperados.getEmail().equals(usuario.getEmail())) {	
-					if(usuariosRecuperados.getSenha().equals(usuario.getSenha())) {
+				if((usuariosRecuperados.getToken() != null) && (usuariosRecuperados.getToken().equals(usuario.getToken()))) {	
+					if(usuariosRecuperados.getId_usuario().equals(usuario.getId_usuario())) {
 						if(usuariosRecuperados.getToken() != null) {
 							usuario.setToken(null);
 							
 							conn = BancoDados.conectar();
-							new UsuarioDAO(conn).logarDeslogarUsuario(usuario);
-							break;
+							new UsuarioDAO(conn).deslogarUsuario(usuario);
+							Retorno retorno = new Retorno();
+							retorno.setCodigo(200);
+							return retorno;
 						} else {
 							throw new GeneralErrorException("Usuário não está logado.");
 						}
 						
 					} else {
-						throw new GeneralErrorException("Senha incorreta.");
+						throw new GeneralErrorException("Id de usuário incorreto.");
 					}
 				}
 				contador++;
 				if(contador == listaUsuarios.size()) {
-					throw new GeneralErrorException("E-mail ou senha incorretos.");
+					throw new GeneralErrorException("Token ou id_usuario incorretos.");
 				}
 			}
 		} else {
@@ -130,6 +140,10 @@ public class UsuarioService {
 			throw new GeneralErrorException("Nenhum usuário cadastrado.");
 		}
 		
+		
+		Retorno retorno = new Retorno();
+		retorno.setCodigo(500);
+		return retorno;
 	}
 	
 	//Verificações e Funções Extras

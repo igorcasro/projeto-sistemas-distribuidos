@@ -1,6 +1,7 @@
 package gui.client;
 
-import java.awt.EventQueue;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,10 +22,22 @@ public class AtualizarCadastro extends JFrame {
 	private JButton btnAtualizar;
 	private JButton btnLimpar;
 
+	private PrintWriter out;
+	private BufferedReader in;
+	
 	/**
 	 * Create the frame.
 	 */
-	public AtualizarCadastro() {
+	public AtualizarCadastro(PrintWriter out, BufferedReader in) {
+		
+		this.out = out;
+		this.in = in;
+		
+		this.initComponents();
+		
+	}
+	
+	private void initComponents() {
 		setTitle("Atualizar Cadastro");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 460, 170);

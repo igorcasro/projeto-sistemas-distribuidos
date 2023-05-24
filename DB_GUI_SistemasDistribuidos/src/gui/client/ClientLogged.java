@@ -2,7 +2,9 @@ package gui.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -16,6 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import com.google.gson.Gson;
+
+import clientSocketHandler.Cliente;
+import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
 import service.UsuarioService;
@@ -40,11 +46,18 @@ public class ClientLogged extends JFrame {
 	private ClientUnlogged clientUnloggedWindow;
 	private UsuarioService usuarioService;
 	private Usuario usuarioLogado;
+	private Cliente cliente;
+	
+	private PrintWriter out;
+	private BufferedReader in;
 
 	/**
 	 * Create the frame.
 	 */
-	public ClientLogged(ClientUnlogged clientUnloggedWindow, Usuario usuarioLogado) {
+	public ClientLogged(PrintWriter out, BufferedReader in, ClientUnlogged clientUnloggedWindow, Usuario usuarioLogado) {
+		
+		this.out = out;
+		this.in = in;
 		
 		this.clientUnloggedWindow = clientUnloggedWindow;
 		this.usuarioLogado = usuarioLogado;
@@ -74,7 +87,7 @@ public class ClientLogged extends JFrame {
 		
 		panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Dados do Usuário", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(12, 0, 426, 70);
+		panel.setBounds(12, 0, 414, 70);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -98,53 +111,60 @@ public class ClientLogged extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				new Cadastrar().setVisible(true);
+				new Cadastrar(out, in).setVisible(true);
 			}
 		});
 		btnCadastrar.setBounds(96, 82, 256, 25);
 		contentPane.add(btnCadastrar);
 		
 		btnAtualizarCadastro = new JButton("Atualizar Cadastro");
-		btnAtualizarCadastro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				new AtualizarCadastro().setVisible(true);
-			}
-		});
+		btnAtualizarCadastro.setEnabled(false);
+//		btnAtualizarCadastro.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//			
+//				new AtualizarCadastro(out, in).setVisible(true);
+//			}
+//		});
 		btnAtualizarCadastro.setBounds(96, 119, 256, 25);
 		contentPane.add(btnAtualizarCadastro);
 		
 		btnVerListaDeIncidentes = new JButton("Ver Lista de Incidentes");
-		btnVerListaDeIncidentes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				new VerListaDeIncidentes().setVisible(true);
-			}
-		});
-		
+		btnVerListaDeIncidentes.setEnabled(false);
+//		btnVerListaDeIncidentes.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//			
+//				new VerListaDeIncidentes().setVisible(true);
+//			}
+//		});
+//		
 		JButton btnReportarIncidente = new JButton("Reportar Incidente");
+		btnReportarIncidente.setEnabled(false);
 		btnReportarIncidente.setBounds(96, 156, 256, 25);
 		contentPane.add(btnReportarIncidente);
 		btnVerListaDeIncidentes.setBounds(96, 193, 256, 25);
 		contentPane.add(btnVerListaDeIncidentes);
 		
 		btnRemoverCadastro = new JButton("Remover Cadastro");
-		btnRemoverCadastro.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				new RemoverCadastro().setVisible(true);
-			}
-		});
+		btnRemoverCadastro.setEnabled(false);
+//		btnRemoverCadastro.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//			
+//				new RemoverCadastro(cliente).setVisible(true);
+//			}
+//		});
 		
 		JButton btnVerIncidentesReportados = new JButton("Ver Incidentes Reportados");
+		btnVerIncidentesReportados.setEnabled(false);
 		btnVerIncidentesReportados.setBounds(96, 230, 256, 25);
 		contentPane.add(btnVerIncidentesReportados);
 		
 		btnEditarIncidente = new JButton("Editar Incidente");
+		btnEditarIncidente.setEnabled(false);
 		btnEditarIncidente.setBounds(96, 267, 256, 25);
 		contentPane.add(btnEditarIncidente);
 		
 		JButton btnRemoverIncidente = new JButton("Remover Incidente");
+		btnRemoverIncidente.setEnabled(false);
 		btnRemoverIncidente.setBounds(96, 304, 256, 25);
 		contentPane.add(btnRemoverIncidente);
 		btnRemoverCadastro.setBounds(96, 341, 256, 25);
@@ -154,7 +174,12 @@ public class ClientLogged extends JFrame {
 		btnSairDoSistema.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			
-				btnDeslogarActionPerformed();
+				try {
+					btnDeslogarActionPerformed();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnSairDoSistema.setBounds(96, 378, 256, 25);
@@ -177,17 +202,33 @@ public class ClientLogged extends JFrame {
 		return labelID;
 	}
 	
-	public void btnDeslogarActionPerformed() {
+	public void btnDeslogarActionPerformed() throws IOException {
 		
 		try {
-			System.out.println(usuarioLogado);
-			usuarioService.deslogar(usuarioLogado);
 			
-			JOptionPane.showMessageDialog(null, "Usuário deslogado com sucesso.", "Logout de Usuário", JOptionPane.INFORMATION_MESSAGE);
+			usuarioLogado.setId_operacao(9);
 			
-			clientUnloggedWindow.setVisible(true);			
+			Gson gson = new Gson();
 			
-		} catch (SQLException | IOException | GeneralErrorException gee) {
+			String json = gson.toJson(usuarioLogado);
+			System.out.println("Client sent: " + json);
+			out.println(json);
+			
+			String jsonRetorno = in.readLine();
+			
+			System.out.println("Server sent: " + jsonRetorno);
+			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
+			
+			if(retorno.getCodigo().equals(200)) {
+				
+				JOptionPane.showMessageDialog(null, "Usuário deslogado com sucesso.", "Logout de Usuário", JOptionPane.INFORMATION_MESSAGE);
+				clientUnloggedWindow.setVisible(true);	
+			} else {
+				throw new GeneralErrorException("Erro ao deslogar usuário");
+			
+			}
+
+		} catch (GeneralErrorException gee) {
 			
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Logout de Usuário", JOptionPane.ERROR_MESSAGE);
 			gee.printStackTrace();

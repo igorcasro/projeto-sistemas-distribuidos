@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import clientSocketHandler.Cliente;
+
 public class RemoverCadastro extends JFrame {
 
 	private JPanel contentPane;
@@ -18,11 +20,23 @@ public class RemoverCadastro extends JFrame {
 	private JButton btnLimpar;
 	private JTextField textFieldToken;
 	private JTextField textFieldID;
+	
+	private Cliente cliente;	
 
 	/**
 	 * Create the frame.
 	 */
-	public RemoverCadastro() {
+	public RemoverCadastro(Cliente cliente) {
+		
+		this.cliente = cliente;
+		
+		this.initComponents();
+		
+	}
+	
+	private void initComponents() {
+				
+		
 		setTitle("Remover Cadastro");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 461, 220);

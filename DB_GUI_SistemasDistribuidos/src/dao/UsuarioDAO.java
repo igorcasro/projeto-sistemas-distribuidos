@@ -136,7 +136,7 @@ public class UsuarioDAO {
 		}
 	}
 	
-	public void logarDeslogarUsuario(Usuario usuario) throws SQLException {
+	public void logarUsuario(Usuario usuario) throws SQLException {
 		
 		PreparedStatement st = null;
 		
@@ -147,6 +147,27 @@ public class UsuarioDAO {
 			st.setString(1, usuario.getToken());
 			st.setString(2, usuario.getEmail());
 			st.setString(3, usuario.getSenha());
+			
+			st.executeUpdate();
+			
+		} finally {
+			
+			BancoDados.finalizarStatement(st);
+			BancoDados.desconectar();
+		}
+		
+	}
+	
+	public void deslogarUsuario(Usuario usuario) throws SQLException {
+		
+		PreparedStatement st = null;
+		
+		try {
+			
+			st = conn.prepareStatement("update usuario set token = ? where id_usuario = ?");
+			
+			st.setString(1, usuario.getToken());
+			st.setInt(2, usuario.getId_usuario());
 			
 			st.executeUpdate();
 			

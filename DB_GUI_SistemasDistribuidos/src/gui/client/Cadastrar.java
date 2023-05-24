@@ -2,8 +2,9 @@ package gui.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.io.PrintWriter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,9 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.google.gson.Gson;
+
+import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
-import service.UsuarioService;
 
 public class Cadastrar extends JFrame {
 
@@ -29,16 +32,18 @@ public class Cadastrar extends JFrame {
 	private JButton btnCadastrar;
 	private JButton btnLimpar;
 	
-	private UsuarioService usuarioService;
-
+	private PrintWriter out;
+	private BufferedReader in;
+	
 	/**
 	 * Create the frame.
 	 */
-	public Cadastrar() {
+	public Cadastrar(PrintWriter out, BufferedReader in) {
+		
+		this.out = out;
+		this.in = in;
 		
 		this.initComponents();
-		
-		this.usuarioService = new UsuarioService();
 		
 	}
 	
@@ -83,7 +88,12 @@ public class Cadastrar extends JFrame {
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				btnCadastrarActionPerformed();
+				try {
+					btnCadastrarActionPerformed();
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
 				
 			}
 		});
@@ -96,24 +106,36 @@ public class Cadastrar extends JFrame {
 	}
 	
 	
-	private void btnCadastrarActionPerformed(){
+	private void btnCadastrarActionPerformed() throws IOException{
 		
 		try {
 			
 			Usuario usuario = new Usuario();
+			usuario.setId_operacao(1);
 			usuario.setNome(textFieldNome.getText());
 			usuario.setEmail(textFieldEmail.getText());
 			String hashedPswd = Usuario.hashed(textFieldSenha.getText());			
 			usuario.setSenha(hashedPswd);
 			
-			usuarioService.cadastrar(usuario);
+			Gson gson = new Gson();
 			
-			JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso.", "Cadastro de Usuário", JOptionPane.INFORMATION_MESSAGE);
-		} catch (SQLException | IOException | GeneralErrorException gee) {
+			String json = gson.toJson(usuario);
+			System.out.println("Client sent: " + json);
+			out.println(json);
 			
+			String jsonRetorno = in.readLine();
+			
+			System.out.println("Server sent: " + jsonRetorno);
+			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
+			
+			if(retorno.getCodigo().equals(200)) {
+				JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso.", "Cadastro de Usuário", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				throw new GeneralErrorException("Erro ao cadastrar usuário");
+			}
+		
+		} catch(GeneralErrorException gee) {
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
-			gee.printStackTrace();
-			
 		} finally {
 			
 			this.dispose();

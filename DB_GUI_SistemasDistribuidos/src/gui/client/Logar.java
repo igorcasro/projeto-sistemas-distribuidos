@@ -2,8 +2,9 @@ package gui.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.io.PrintWriter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,9 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.google.gson.Gson;
+
+import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
-import service.UsuarioService;
 
 public class Logar extends JFrame {
 
@@ -29,17 +32,19 @@ public class Logar extends JFrame {
 	private ClientUnlogged clientUnloggedWindow;
 	private Usuario usuarioLogado;
 	
-	private UsuarioService usuarioService;
+	private PrintWriter out;
+	private BufferedReader in;
 	
 	/**
 	 * Create the frame.
 	 */
-	public Logar(ClientUnlogged clientUnloggedWindow) {
-
+	public Logar(PrintWriter out, BufferedReader in, ClientUnlogged clientUnloggedWindow) {
+		
+		this.out = out;
+		this.in = in;
+		
 		this.clientUnloggedWindow = clientUnloggedWindow;
 		this.initComponents();
-		
-		this.usuarioService = new UsuarioService();
 	}
 	
 	public void initComponents(){
@@ -75,7 +80,12 @@ public class Logar extends JFrame {
 		btnLogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				btnLogarActionPerformed();
+				try {
+					btnLogarActionPerformed();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		btnLogar.setBounds(320, 87, 117, 25);
@@ -86,26 +96,42 @@ public class Logar extends JFrame {
 		contentPane.add(btnLimpar);
 	}
 
-	private void btnLogarActionPerformed() {
-		Usuario usuario = new Usuario();
-		usuarioLogado = new Usuario();
+	private void btnLogarActionPerformed() throws IOException {
+		
 		try {
 			
-			
+			Usuario usuario = new Usuario();
+			usuario.setId_operacao(3);
 			usuario.setEmail(textFieldEmail.getText());
 			String hashedPswd = Usuario.hashed(textFieldSenha.getText());			
 			usuario.setSenha(hashedPswd);
-			usuarioLogado = usuarioService.logar(usuario);
 			
-			JOptionPane.showMessageDialog(null, "Usuário logado com sucesso.", "Login de Usuário", JOptionPane.INFORMATION_MESSAGE);
+			Gson gson = new Gson();
 			
-			clientUnloggedWindow.setVisible(false);			
-			new ClientLogged(clientUnloggedWindow, usuarioLogado).setVisible(true);
+			String json = gson.toJson(usuario);
+			System.out.println("Client sent: " + json);
+			out.println(json);
 			
-		} catch (SQLException | IOException | GeneralErrorException gee) {
+			String jsonRetorno = in.readLine();
+			
+			System.out.println("Server sent: " + jsonRetorno);
+			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
+			
+			if(retorno.getCodigo().equals(200)) {
+				JOptionPane.showMessageDialog(null, "Usuário logado com sucesso.", "Login de Usuário", JOptionPane.INFORMATION_MESSAGE);
+				
+				usuarioLogado = new Usuario();
+				usuarioLogado.setToken(retorno.getToken());
+				usuarioLogado.setId_usuario(retorno.getId_usuario());
+				
+				clientUnloggedWindow.setVisible(false);			
+				new ClientLogged(out, in, clientUnloggedWindow, usuarioLogado).setVisible(true);			
+			} else {
+				throw new GeneralErrorException("Erro ao logar usuário usuário");
+			}
+		} catch (GeneralErrorException gee) {
 			
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Login de Usuário", JOptionPane.ERROR_MESSAGE);
-			gee.printStackTrace();
 		} finally {
 			
 			this.dispose();	

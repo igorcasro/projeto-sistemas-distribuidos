@@ -69,7 +69,7 @@ public class UsuarioDAOTeste {
 		usuario.setToken(token);
 		
 		Connection conn = BancoDados.conectar();
-		new UsuarioDAO(conn).logarDeslogarUsuario(usuario);
+		new UsuarioDAO(conn).logarUsuario(usuario);
 		
 		System.out.println("Usuário logado com sucesso.");
 	}
