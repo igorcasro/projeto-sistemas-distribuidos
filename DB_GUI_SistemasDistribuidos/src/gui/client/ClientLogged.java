@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,11 +19,9 @@ import javax.swing.border.TitledBorder;
 
 import com.google.gson.Gson;
 
-import clientSocketHandler.Cliente;
 import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
-import service.UsuarioService;
 
 public class ClientLogged extends JFrame {
 
@@ -44,12 +41,16 @@ public class ClientLogged extends JFrame {
 	private JButton btnEditarIncidente;
 	
 	private ClientUnlogged clientUnloggedWindow;
-	private UsuarioService usuarioService;
 	private Usuario usuarioLogado;
-	private Cliente cliente;
 	
 	private PrintWriter out;
 	private BufferedReader in;
+	
+	private String tokenReceived;
+	
+	public void setTokenReceived(String tokenReceived) {
+		this.tokenReceived = tokenReceived;
+	}
 
 	/**
 	 * Create the frame.
@@ -62,8 +63,6 @@ public class ClientLogged extends JFrame {
 		this.clientUnloggedWindow = clientUnloggedWindow;
 		this.usuarioLogado = usuarioLogado;
 		this.initComponents();
-		
-		this.usuarioService = new UsuarioService();
 	}
 	
 	private void initComponents() {
@@ -118,13 +117,12 @@ public class ClientLogged extends JFrame {
 		contentPane.add(btnCadastrar);
 		
 		btnAtualizarCadastro = new JButton("Atualizar Cadastro");
-		btnAtualizarCadastro.setEnabled(false);
-//		btnAtualizarCadastro.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//			
-//				new AtualizarCadastro(out, in).setVisible(true);
-//			}
-//		});
+		btnAtualizarCadastro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				btnAtualizarActionPerformed();
+			}
+		});
 		btnAtualizarCadastro.setBounds(96, 119, 256, 25);
 		contentPane.add(btnAtualizarCadastro);
 		
@@ -188,18 +186,22 @@ public class ClientLogged extends JFrame {
 	
 	private JLabel addTokenReceived() {
 		
-		String Token = usuarioLogado.getToken();
-		JLabel labelToken = new JLabel(Token);
+		tokenReceived = usuarioLogado.getToken();
+		JLabel labelToken = new JLabel(tokenReceived);
 		
 		return labelToken;
 	}
 
 	private JLabel addIDReceived() {
 		
-		int ID = usuarioLogado.getId_usuario();
-		JLabel labelID = new JLabel(Integer.toString(ID));
+		int idReceived = usuarioLogado.getId_usuario();
+		JLabel labelID = new JLabel(Integer.toString(idReceived));
 		
 		return labelID;
+	}
+	
+	public void btnAtualizarActionPerformed() {
+		new AtualizarCadastro(out, in, usuarioLogado.getToken(), usuarioLogado.getId_usuario(), this, clientUnloggedWindow).setVisible(true);
 	}
 	
 	public void btnDeslogarActionPerformed() throws IOException {

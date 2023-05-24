@@ -52,6 +52,43 @@ public class UsuarioService {
 
 	}
 	
+	public Retorno atualizarCadastro(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
+		
+		Connection conn = BancoDados.conectar();
+		Usuario usuarioRetorno = new UsuarioDAO(conn).buscarUsuario(usuario);
+		
+		if(usuarioRetorno == null || usuarioRetorno.getEmail() == null) {
+			if(!this.verificaNome(usuario.getNome())) {
+				throw new GeneralErrorException("Nome inválido.");
+			}
+			
+			if(!this.verificaEmail(usuario.getEmail())){
+				throw new GeneralErrorException("E-mail inválido.");
+			}
+			
+			if(!this.verificaSenha(usuario.getSenha())) {
+				throw new GeneralErrorException("Senha inválida.");
+			}
+			
+			String token = gerarString24Caracteres();
+			usuario.setToken(token);
+			
+			conn = BancoDados.conectar();
+			new UsuarioDAO(conn).atualizarCadastro(usuario);
+			Retorno retorno = new Retorno();
+			retorno.setCodigo(200);
+			retorno.setToken(token);
+			return retorno;
+		} else if(usuarioRetorno.getEmail() != null) {
+			
+			throw new GeneralErrorException("E-mail já existe no sistema, favor tentar um novo.");
+		} else {
+			
+			throw new GeneralErrorException("Não foi possível atualizar o usuário.");
+		}
+		
+	}
+	
 	public Retorno logar(Usuario usuario) throws SQLException, IOException, GeneralErrorException{
 		
 		Connection conn = BancoDados.conectar();

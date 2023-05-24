@@ -82,14 +82,14 @@ public class UsuarioDAO {
 
 		try {
 
-			st = conn.prepareStatement("update usuario set nome = ?, email = ?, senha = ? where id_usuario = ? and token = ?");
+			st = conn.prepareStatement("update usuario set nome = ?, email = ?, senha = ?, token = ? where id_usuario = ?");
 
 			st.setString(1, usuario.getNome());
 			st.setString(2, usuario.getEmail());
 			st.setString(3, usuario.getSenha());
-			st.setInt(4, usuario.getId_usuario());
-			st.setString(5, usuario.getToken());
-
+			st.setString(4, usuario.getToken());
+			st.setInt(5, usuario.getId_usuario());
+			
 			st.executeUpdate();
 
 		} finally {

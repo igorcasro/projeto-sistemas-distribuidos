@@ -92,6 +92,21 @@ import service.UsuarioService;
 			        } finally {
 			        	System.out.println("Server sent: " + json);
 			        }
+		    	} else if(user.getId_operacao() == 2) {
+		    		
+		    		System.out.println("====== Atualizar ======");
+		    		
+		    		try {
+			        	Retorno retorno = usuarioService.atualizarCadastro(user);
+			        	json = gson.toJson(retorno);
+			        	out.println(json);
+			        } catch(SQLException | GeneralErrorException gee) {
+	        			json = erro(gson, gee.getMessage());
+	        			out.println(json);
+			        } finally {
+			        	System.out.println("Server sent: " + json);
+			        }
+		    		
 		    	} else if(user.getId_operacao() == 3) {
 		    		System.out.println("====== Logar ======");
 		    		
