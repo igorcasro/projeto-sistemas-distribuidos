@@ -10,15 +10,19 @@ import java.sql.SQLException;
 
 import com.google.gson.Gson;
 
+import entities.Incidente;
 import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
+import service.IncidenteService;
 import service.UsuarioService; 
 
 	public class Server extends Thread { 
 		private static int connectionPort;
 		protected Socket clientSocket;
+		
 		private UsuarioService usuarioService;
+		private IncidenteService incidenteService;
 	
 		public static void main(String[] args) throws IOException { 
 	    ServerSocket serverSocket = null; 
@@ -51,7 +55,10 @@ import service.UsuarioService;
 	}
 
 	private Server (Socket clientSoc) {
+		
 		this.usuarioService = new UsuarioService();
+		this.incidenteService = new IncidenteService();
+		
 		clientSocket = clientSoc;
 		start();
 	}
@@ -75,6 +82,9 @@ import service.UsuarioService;
 		        Gson gson = new Gson();
 			    Usuario user = null;
 			    user = gson.fromJson(inputLine, Usuario.class);
+			    
+			    Incidente incident = null;
+			    incident = gson.fromJson(inputLine, Incidente.class);
 			    String json = null;
 			        	
 			    System.out.println("\nClient sent: " + inputLine);
@@ -112,6 +122,20 @@ import service.UsuarioService;
 		    		
 		    		try {
 			        	Retorno retorno = usuarioService.logar(user);
+			        	json = gson.toJson(retorno);
+			        	out.println(json);
+			        } catch(SQLException | GeneralErrorException gee) {
+	        			json = erro(gson, gee.getMessage());
+	        			out.println(json);
+			        } finally {
+			        	System.out.println("Server sent: " + json);
+			        }
+	
+		    	} else if(user.getId_operacao() == 4) {
+		    		System.out.println("== Reportar Incidente ==");
+		    		
+		    		try {
+			        	Retorno retorno = incidenteService.cadastrar(incident);
 			        	json = gson.toJson(retorno);
 			        	out.println(json);
 			        } catch(SQLException | GeneralErrorException gee) {

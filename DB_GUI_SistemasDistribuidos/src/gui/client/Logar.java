@@ -127,7 +127,7 @@ public class Logar extends JFrame {
 				clientUnloggedWindow.setVisible(false);			
 				new ClientLogged(out, in, clientUnloggedWindow, usuarioLogado).setVisible(true);			
 			} else {
-				throw new GeneralErrorException("Erro ao logar usuário usuário");
+				throw new GeneralErrorException("Erro ao logar usuário");
 			}
 		} catch (GeneralErrorException gee) {
 			

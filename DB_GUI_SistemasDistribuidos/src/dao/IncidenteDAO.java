@@ -34,7 +34,7 @@ public class IncidenteDAO {
 			st.setString(5, incidente.getToken());
 			st.setInt(6, incidente.getId_usuario());
 			
-			st.executeQuery();
+			st.executeUpdate();
 			
 		}	finally {
 			
@@ -51,7 +51,7 @@ public class IncidenteDAO {
 		
 		try {
 
-			st = conn.prepareStatement("select * from incidente order by nome");
+			st = conn.prepareStatement("select * from incidente order by id_incidente");
 
 			rs = st.executeQuery();
 

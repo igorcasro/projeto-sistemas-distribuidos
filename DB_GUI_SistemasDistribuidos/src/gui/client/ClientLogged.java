@@ -136,7 +136,12 @@ public class ClientLogged extends JFrame {
 //		});
 //		
 		JButton btnReportarIncidente = new JButton("Reportar Incidente");
-		btnReportarIncidente.setEnabled(false);
+		btnReportarIncidente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				btnReportarIncidenteActionPerformed();
+			}
+		});
 		btnReportarIncidente.setBounds(96, 156, 256, 25);
 		contentPane.add(btnReportarIncidente);
 		btnVerListaDeIncidentes.setBounds(96, 193, 256, 25);
@@ -202,6 +207,10 @@ public class ClientLogged extends JFrame {
 	
 	public void btnAtualizarActionPerformed() {
 		new AtualizarCadastro(out, in, usuarioLogado.getToken(), usuarioLogado.getId_usuario(), this, clientUnloggedWindow).setVisible(true);
+	}
+	
+	public void btnReportarIncidenteActionPerformed() {
+		new ReportarIncidente(out, in, usuarioLogado.getToken(), usuarioLogado.getId_usuario()).setVisible(true);;
 	}
 	
 	public void btnDeslogarActionPerformed() throws IOException {
