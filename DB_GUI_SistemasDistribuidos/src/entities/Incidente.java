@@ -1,74 +1,102 @@
 package entities;
 
-import java.util.Date;
-
 public class Incidente {
 
-	private Date data;
-	private String rodovia;
-	private Integer km;
-	private enums.TipoIncidente TipoIncidente;
-	private String token;
-	private Integer id_usuario;
-	private Integer id_incidente;
+	private String data = null;
+	private String rodovia = null;
+	private Integer km = null;
+	private Integer TipoIncidente = null;
+	private String token = null;
+	private Integer id_usuario = null;
+	private Integer id_incidente = null;
 	
 	public Incidente () {
-		data = null;
-		rodovia = null;
-		km = null;
-		TipoIncidente = null;
-		token = null;
-		id_usuario = null;
-		id_incidente = null;
+		
 	}
 
-	public Date getData() {
+	public String getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+
+
+	public void setData(String data) {
 		this.data = data;
 	}
+
+
 
 	public String getRodovia() {
 		return rodovia;
 	}
 
+
+
 	public void setRodovia(String rodovia) {
 		this.rodovia = rodovia;
 	}
 
-	public int getKm() {
+
+
+	public Integer getKm() {
 		return km;
 	}
 
-	public void setKm(int km) {
+
+
+	public void setKm(Integer km) {
 		this.km = km;
 	}
 
-	public enums.TipoIncidente getTipoIncidente() {
+
+
+	public Integer getTipoIncidente() {
 		return TipoIncidente;
 	}
 
-	public void setTipoIncidente(enums.TipoIncidente tipoIncidente) {
+
+
+	public void setTipoIncidente(Integer tipoIncidente) {
 		TipoIncidente = tipoIncidente;
 	}
+
+
 
 	public String getToken() {
 		return token;
 	}
 
-	public int getId_usuario() {
+
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+
+
+	public Integer getId_usuario() {
 		return id_usuario;
 	}
-	
+
+
+
+	public void setId_usuario(Integer id_usuario) {
+		this.id_usuario = id_usuario;
+	}
+
+
+
 	public Integer getId_incidente() {
 		return id_incidente;
 	}
 
+
+
 	public void setId_incidente(Integer id_incidente) {
 		this.id_incidente = id_incidente;
 	}
+
+
 
 	@Override
 	public String toString() {
