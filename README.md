@@ -2,7 +2,7 @@
 Repositório criado para facilitar o acesso aos arquivos criados para o projeto desenvolvido na matéria de Sistemas Distribuídos da UTFPR - PG
 
 # Funcionamento do projeto
-  Atualmente estão implementas quatro funcionalidades (Cadastro, Atualizar Cadastro, Login e Logout) com acesso à base de dados e interface, além do Socket.
+  Atualmente estão implementas cinco funcionalidades (Cadastro, Atualizar Cadastro, Login, Reportar Incidente e Logout) com acesso à base de dados e interface, além do aparente correto funcionamento do Socket.
   
 # Características Específicas
 - Código desenvolvido por Igor Castro, tendo início em 03/2023;
