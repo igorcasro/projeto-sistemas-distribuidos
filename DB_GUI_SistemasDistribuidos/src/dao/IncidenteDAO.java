@@ -44,7 +44,7 @@ public class IncidenteDAO {
 		
 	}
 	
-	public List<Incidente> buscarTodos() throws SQLException {
+	public List<Incidente> buscarTodosSemDadosUsuario() throws SQLException {
 		
 		PreparedStatement st = null;
 		ResultSet rs = null;
@@ -65,8 +65,8 @@ public class IncidenteDAO {
 				incidente.setRodovia(rs.getString("rodovia"));
 				incidente.setKm(rs.getInt("km"));
 				incidente.setTipoIncidente(rs.getInt("tipo_incidente"));
-				incidente.setToken(rs.getString("token"));
-				incidente.setId_usuario(rs.getInt("id_usuario"));
+//				incidente.setToken(rs.getString("token"));
+//				incidente.setId_usuario(rs.getInt("id_usuario"));
 				incidente.setId_incidente(rs.getInt("id_incidente"));
 				
 				listaIncidentes.add(incidente);

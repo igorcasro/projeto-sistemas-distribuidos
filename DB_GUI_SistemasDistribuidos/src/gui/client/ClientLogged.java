@@ -127,14 +127,13 @@ public class ClientLogged extends JFrame {
 		contentPane.add(btnAtualizarCadastro);
 		
 		btnVerListaDeIncidentes = new JButton("Ver Lista de Incidentes");
-		btnVerListaDeIncidentes.setEnabled(false);
-//		btnVerListaDeIncidentes.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//			
-//				new VerListaDeIncidentes().setVisible(true);
-//			}
-//		});
-//		
+		btnVerListaDeIncidentes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				new SolicitarListaDeIncidentes(out, in).setVisible(true);
+			}
+		});
+		
 		JButton btnReportarIncidente = new JButton("Reportar Incidente");
 		btnReportarIncidente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

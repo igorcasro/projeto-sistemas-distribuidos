@@ -1,7 +1,5 @@
-/dao/
 /gui/
+/entities/
 /serverSocketHandler/
 /service/
-/entities/
-/enums/
-/handler/
+/dao/

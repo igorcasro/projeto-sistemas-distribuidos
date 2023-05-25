@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/05/2023 às 04:09
+-- Tempo de geração: 25/05/2023 às 19:23
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -37,6 +37,18 @@ CREATE TABLE `incidente` (
   `data` varchar(19) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Despejando dados para a tabela `incidente`
+--
+
+INSERT INTO `incidente` (`id_incidente`, `id_usuario`, `token`, `tipo_incidente`, `km`, `rodovia`, `data`) VALUES
+(1, 23, 'AAAAAAAAAAAAAAAAAAAAA', 1, 123, 'BR-153', '2023-05-25 11:13:00'),
+(2, 23, 'AAAAAAAAAAAAAAAAAAAAA', 1, 123, 'BR-153', '2023-05-25 11:13:00'),
+(3, 23, '3W7jRpJqPVzTJrCXZi5ml8q2', 13, 392, 'BR-200', '2023-05-25 11:50:00'),
+(4, 23, '3W7jRpJqPVzTJrCXZi5ml8q2', 12, 24, 'PR-190', '1999-01-02 23:33:33'),
+(5, 24, 'Ovip9hoegsbxcxZ59fRXvwLn', 4, 342, 'PR-157', '2023-05-05 12:00:00'),
+(6, 24, 'DvpuxpzA9u5h7Fqu2dY2GhLD', 1, 230, 'GO-070', '2023-02-02 22:22:22');
+
 -- --------------------------------------------------------
 
 --
@@ -56,8 +68,8 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`nome`, `email`, `senha`, `token`, `id_usuario`) VALUES
-('igor', 'igorpfcastro@gmail.com', '|m{|m9:;', NULL, 23),
-('Tais', 'tais-azevedo@hotmail.com', '|m{|m9:;', NULL, 24);
+('igor', 'igorpfcastro@gmail.com', '|m{|m9:;', 'ghWIEJZq9lhSor3ll2Qz3aXz', 23),
+('Eduardo', 'eduardo@gmail.com', 'nz|p:>', 'DvpuxpzA9u5h7Fqu2dY2GhLD', 24);
 
 --
 -- Índices para tabelas despejadas
@@ -83,7 +95,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `incidente`
 --
 ALTER TABLE `incidente`
-  MODIFY `id_incidente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_incidente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`

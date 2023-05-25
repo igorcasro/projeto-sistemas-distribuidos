@@ -9,6 +9,8 @@ public class Incidente {
 	private String token = null;
 	private Integer id_usuario = null;
 	private Integer id_incidente = null;
+	private String faixa_km = null;
+	private Integer periodo = null;
 	
 	public Incidente () {
 		
@@ -78,10 +80,29 @@ public class Incidente {
 		this.id_incidente = id_incidente;
 	}
 
+	public String getFaixa_km() {
+		return faixa_km;
+	}
+
+	public void setFaixa_km(String faixa_km) {
+		this.faixa_km = faixa_km;
+	}
+
+	public Integer getPeriodo() {
+		return periodo;
+	}
+
+	public void setPeriodo(Integer periodo) {
+		this.periodo = periodo;
+	}
+
 	@Override
 	public String toString() {
-		return "Incidente [data=" + data + ", rodovia=" + rodovia + ", km=" + km + ", TipoIncidente=" + TipoIncidente
-				+ ", token=" + token + ", id_usuario=" + id_usuario + ", id_incidente=" + id_incidente + "]";
-	}	
+		return "Incidente [id_operacao=" + id_operacao + ", data=" + data + ", rodovia=" + rodovia + ", km=" + km
+				+ ", TipoIncidente=" + TipoIncidente + ", token=" + token + ", id_usuario=" + id_usuario
+				+ ", id_incidente=" + id_incidente + ", faixa_km=" + faixa_km + ", periodo=" + periodo + "]";
+	}
+
+	
 	
 }

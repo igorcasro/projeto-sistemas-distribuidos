@@ -3,6 +3,7 @@ package service;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.google.gson.Gson;
 
@@ -15,6 +16,7 @@ import exceptions.GeneralErrorException;
 public class IncidenteService {
 
 	Gson gson;
+	private List<Incidente> listaIncidentes;
 	
 	public IncidenteService() {
 		
@@ -45,4 +47,20 @@ public class IncidenteService {
 		}
 	}
 	
+	public Retorno buscarTodos(Incidente incidente) throws SQLException, IOException, GeneralErrorException {
+		
+		Connection conn = BancoDados.conectar();
+		
+		this.listaIncidentes = new IncidenteDAO(conn).buscarTodosSemDadosUsuario();
+		
+		if(listaIncidentes == null) {
+			throw new GeneralErrorException("Não há incidentes reportados.");
+		}
+		
+		Retorno retorno = new Retorno();
+		retorno.setCodigo(200);
+		retorno.setLista_incidentes(listaIncidentes);
+		
+		return retorno;
+	}
 }

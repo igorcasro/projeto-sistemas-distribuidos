@@ -122,14 +122,13 @@ public class ClientUnlogged extends JFrame {
     		contentPane.add(btnLogar);
     		
     		btnVerListaDeIncidentes = new JButton("Ver Lista de Incidentes");
-    		btnVerListaDeIncidentes.setEnabled(false);
     		btnVerListaDeIncidentes.setBounds(88, 122, 219, 25);
-//    		btnVerListaDeIncidentes.addActionListener(new ActionListener() {
-//    			public void actionPerformed(ActionEvent e) {
-//    			
-//    				new VerListaDeIncidentes().setVisible(true);
-//    			}
-//    		});
+    		btnVerListaDeIncidentes.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    			
+    				new SolicitarListaDeIncidentes(out, in).setVisible(true);
+    			}
+    		});
     		contentPane.add(btnVerListaDeIncidentes);
     		
     		btnRemoverCadastro = new JButton("Remover Cadastro");

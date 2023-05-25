@@ -145,6 +145,20 @@ import service.UsuarioService;
 			        	System.out.println("Server sent: " + json);
 			        }
 	
+		    	} else if(user.getId_operacao() == 5) {
+		    		System.out.println("== Ver Lista de Incidentes ==");
+		    		
+		    		try {
+			        	Retorno retorno = incidenteService.buscarTodos(incident);
+			        	json = gson.toJson(retorno);
+			        	out.println(json);
+			        } catch(SQLException | GeneralErrorException gee) {
+	        			json = erro(gson, gee.getMessage());
+	        			out.println(json);
+			        } finally {
+			        	System.out.println("Server sent: " + json);
+			        }
+	
 		    	} else if(user.getId_operacao() == 9) {
 		    		System.out.println("==== Deslogar ====");
 		    		

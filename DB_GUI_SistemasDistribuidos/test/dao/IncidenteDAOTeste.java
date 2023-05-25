@@ -31,7 +31,7 @@ public class IncidenteDAOTeste {
 	public static void buscarTodosTeste() throws SQLException, IOException {
 		
 		Connection conn = BancoDados.conectar();
-		List<Incidente> listaIncidente = new IncidenteDAO(conn).buscarTodos();
+		List<Incidente> listaIncidente = new IncidenteDAO(conn).buscarTodosSemDadosUsuario();
 		
 		for (Incidente incidente : listaIncidente) {
 			
