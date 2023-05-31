@@ -53,7 +53,7 @@ public class VerListaDeIncidentes extends JFrame {
 		for (Incidente incidente : incidentesLista) {
 			
 			modelo.addRow(new Object[] {incidente.getId_incidente(), incidente.getData(), incidente.getRodovia(), 
-					incidente.getKm(), incidente.getTipoIncidente()});
+					incidente.getKm(), incidente.getTipo_incidente()});
 		}
 		
 		

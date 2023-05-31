@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -69,7 +71,7 @@ public class ReportarIncidente extends JFrame {
 
 		try {
 
-			this.mascaraData = new MaskFormatter("####-##-## ##:##:##");
+			this.mascaraData = new MaskFormatter("##-##-#### ##:##:##");
 
 		} catch (ParseException e) {
 
@@ -105,7 +107,7 @@ public class ReportarIncidente extends JFrame {
 		
 		setTitle("Reportar Incidente");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 380, 259);
+		setBounds(100, 100, 490, 259);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -113,7 +115,7 @@ public class ReportarIncidente extends JFrame {
 		contentPane.setLayout(null);
 		
 		lblData = new JLabel("Data:");
-		lblData.setBounds(12, 14, 38, 16);
+		lblData.setBounds(12, 14, 61, 16);
 		contentPane.add(lblData);
 		
 		lblRodovia = new JLabel("Rodovia:");
@@ -121,19 +123,27 @@ public class ReportarIncidente extends JFrame {
 		contentPane.add(lblRodovia);
 		
 		lblTipoDeIncidente = new JLabel("Tipo de Incidente:");
-		lblTipoDeIncidente.setBounds(12, 134, 102, 16);
+		lblTipoDeIncidente.setBounds(12, 134, 226, 16);
 		contentPane.add(lblTipoDeIncidente);
 		
+		Date dataHoraAtual = new Date();
+		String data = new SimpleDateFormat("yyyy-MM-dd").format(dataHoraAtual);
+		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+		
 		textFieldData = new JFormattedTextField(mascaraData);
-		textFieldData.setBounds(174, 10, 180, 25);
+		System.out.println(dataHoraAtual.toString());
+		System.out.println(data);
+		System.out.println(hora);
+		textFieldData.setValue(data + " " + hora);
+		textFieldData.setBounds(216, 10, 180, 25);
 		contentPane.add(textFieldData);
 		
 		textFieldRodovia = new JFormattedTextField(mascaraRodovia);
-		textFieldRodovia.setBounds(240, 48, 114, 25);
+		textFieldRodovia.setBounds(282, 48, 114, 25);
 		contentPane.add(textFieldRodovia);
 		
 		textFieldKm = new JFormattedTextField(mascaraKm);
-		textFieldKm.setBounds(276, 86, 78, 25);
+		textFieldKm.setBounds(318, 86, 78, 25);
 		contentPane.add(textFieldKm);
 		
 		chckbxKM = new JCheckBox("KM");
@@ -149,7 +159,7 @@ public class ReportarIncidente extends JFrame {
 
 		
 		comboBox = new JComboBox();
-		comboBox.setBounds(132, 130, 222, 25);
+		comboBox.setBounds(174, 130, 222, 25);
 		contentPane.add(comboBox);
 		
 		for(String tipoIncidenteNome : enums.TipoIncidente.getNomes()) {
@@ -168,11 +178,11 @@ public class ReportarIncidente extends JFrame {
 				}
 			}
 		});
-		btnReportar.setBounds(255, 168, 99, 26);
+		btnReportar.setBounds(297, 162, 99, 26);
 		contentPane.add(btnReportar);
 		
 		btnLimpar = new JButton("Limpar");
-		btnLimpar.setBounds(132, 168, 99, 26);
+		btnLimpar.setBounds(196, 162, 99, 26);
 		contentPane.add(btnLimpar);
 	}
 	
@@ -194,7 +204,7 @@ public class ReportarIncidente extends JFrame {
 			incidente.setRodovia(textFieldRodovia.getText());
 			incidente.setKm(Integer.parseInt(textFieldKm.getText()));
 			int tipoIncidente = transformaNomeEmIntComboBox(comboBox);
-			incidente.setTipoIncidente(tipoIncidente);
+			incidente.setTipo_incidente(tipoIncidente);
 			incidente.setToken(tokenReceived);
 			incidente.setId_usuario(id_usuario);
 			

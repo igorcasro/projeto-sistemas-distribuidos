@@ -30,7 +30,7 @@ public class IncidenteDAO {
 			st.setString(1, incidente.getData());
 			st.setString(2, incidente.getRodovia());
 			st.setInt(3, incidente.getKm());
-			st.setInt(4, incidente.getTipoIncidente());
+			st.setInt(4, incidente.getTipo_incidente());
 			st.setString(5, incidente.getToken());
 			st.setInt(6, incidente.getId_usuario());
 			
@@ -64,7 +64,7 @@ public class IncidenteDAO {
 				incidente.setData(rs.getString("data"));
 				incidente.setRodovia(rs.getString("rodovia"));
 				incidente.setKm(rs.getInt("km"));
-				incidente.setTipoIncidente(rs.getInt("tipo_incidente"));
+				incidente.setTipo_incidente(rs.getInt("tipo_incidente"));
 //				incidente.setToken(rs.getString("token"));
 //				incidente.setId_usuario(rs.getInt("id_usuario"));
 				incidente.setId_incidente(rs.getInt("id_incidente"));

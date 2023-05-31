@@ -28,7 +28,7 @@ public class IncidenteService {
 		
 		if(incidente.getData() != null && 
 				incidente.getRodovia() != null && 
-				incidente.getTipoIncidente() != null &&
+				incidente.getTipo_incidente() != null &&
 				incidente.getToken() != null &&
 				incidente.getId_usuario() != null) {
 			if(incidente.getKm() == null) {

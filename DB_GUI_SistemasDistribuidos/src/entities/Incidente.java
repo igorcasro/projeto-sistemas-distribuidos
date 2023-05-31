@@ -5,7 +5,7 @@ public class Incidente {
 	private String data = null;
 	private String rodovia = null;
 	private Integer km = null;
-	private Integer TipoIncidente = null;
+	private Integer tipo_incidente = null;
 	private String token = null;
 	private Integer id_usuario = null;
 	private Integer id_incidente = null;
@@ -48,12 +48,12 @@ public class Incidente {
 		this.km = km;
 	}
 
-	public Integer getTipoIncidente() {
-		return TipoIncidente;
+	public Integer getTipo_incidente() {
+		return tipo_incidente;
 	}
 
-	public void setTipoIncidente(Integer tipoIncidente) {
-		TipoIncidente = tipoIncidente;
+	public void setTipo_incidente(Integer tipo_incidente) {
+		this.tipo_incidente = tipo_incidente;
 	}
 
 	public String getToken() {
@@ -99,7 +99,7 @@ public class Incidente {
 	@Override
 	public String toString() {
 		return "Incidente [id_operacao=" + id_operacao + ", data=" + data + ", rodovia=" + rodovia + ", km=" + km
-				+ ", TipoIncidente=" + TipoIncidente + ", token=" + token + ", id_usuario=" + id_usuario
+				+ ", tipo_incidente=" + tipo_incidente + ", token=" + token + ", id_usuario=" + id_usuario
 				+ ", id_incidente=" + id_incidente + ", faixa_km=" + faixa_km + ", periodo=" + periodo + "]";
 	}
 
