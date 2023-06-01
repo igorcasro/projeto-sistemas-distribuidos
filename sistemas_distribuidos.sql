@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/05/2023 às 19:23
+-- Tempo de geração: 01/06/2023 às 02:51
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -34,7 +34,7 @@ CREATE TABLE `incidente` (
   `tipo_incidente` int(11) NOT NULL,
   `km` int(11) NOT NULL,
   `rodovia` varchar(6) NOT NULL,
-  `data` varchar(19) NOT NULL
+  `data` timestamp(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -42,12 +42,14 @@ CREATE TABLE `incidente` (
 --
 
 INSERT INTO `incidente` (`id_incidente`, `id_usuario`, `token`, `tipo_incidente`, `km`, `rodovia`, `data`) VALUES
-(1, 23, 'AAAAAAAAAAAAAAAAAAAAA', 1, 123, 'BR-153', '2023-05-25 11:13:00'),
-(2, 23, 'AAAAAAAAAAAAAAAAAAAAA', 1, 123, 'BR-153', '2023-05-25 11:13:00'),
-(3, 23, '3W7jRpJqPVzTJrCXZi5ml8q2', 13, 392, 'BR-200', '2023-05-25 11:50:00'),
-(4, 23, '3W7jRpJqPVzTJrCXZi5ml8q2', 12, 24, 'PR-190', '1999-01-02 23:33:33'),
-(5, 24, 'Ovip9hoegsbxcxZ59fRXvwLn', 4, 342, 'PR-157', '2023-05-05 12:00:00'),
-(6, 24, 'DvpuxpzA9u5h7Fqu2dY2GhLD', 1, 230, 'GO-070', '2023-02-02 22:22:22');
+(3, 23, '3W7jRpJqPVzTJrCXZi5ml8q2', 13, 392, 'BR-200', '2023-05-25 14:50:00.000000'),
+(4, 23, '3W7jRpJqPVzTJrCXZi5ml8q2', 12, 24, 'PR-190', '1999-01-03 02:33:33.000000'),
+(5, 24, 'Ovip9hoegsbxcxZ59fRXvwLn', 4, 342, 'PR-157', '2023-05-05 15:00:00.000000'),
+(6, 24, 'DvpuxpzA9u5h7Fqu2dY2GhLD', 1, 230, 'GO-070', '2023-02-03 01:22:22.000000'),
+(7, 23, '3q7PBsQEh7OsLKod9ymuVyjs', 8, 111, 'GO-111', '2023-05-25 15:00:00.000000'),
+(8, 25, 'n79FTh0GGYMtWj1NtcKXnuBS', 12, 0, 'BR-555', '2023-05-31 22:55:38.000000'),
+(9, 25, 'aFC5Mh9R8hppU2nEFCv5tGNk', 6, 111, 'BR-555', '2023-05-31 23:00:58.000000'),
+(10, 25, 'xIbJ7FBqojxqanWQGOK4EAPg', 6, 555, 'BR-555', '2023-05-31 23:28:22.000000');
 
 -- --------------------------------------------------------
 
@@ -68,8 +70,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`nome`, `email`, `senha`, `token`, `id_usuario`) VALUES
-('igor', 'igorpfcastro@gmail.com', '|m{|m9:;', 'ghWIEJZq9lhSor3ll2Qz3aXz', 23),
-('Eduardo', 'eduardo@gmail.com', 'nz|p:>', 'DvpuxpzA9u5h7Fqu2dY2GhLD', 24);
+('Igor', 'igorpfcastro@gmail.com', '|m{|m9:;', NULL, 25);
 
 --
 -- Índices para tabelas despejadas
@@ -95,13 +96,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `incidente`
 --
 ALTER TABLE `incidente`
-  MODIFY `id_incidente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_incidente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
