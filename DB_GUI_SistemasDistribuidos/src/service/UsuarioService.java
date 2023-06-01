@@ -131,7 +131,6 @@ public class UsuarioService {
 					throw new GeneralErrorException("E-mail ou senha incorretos.");
 				}
 			}
-
 			
 			return null;
 		} else {

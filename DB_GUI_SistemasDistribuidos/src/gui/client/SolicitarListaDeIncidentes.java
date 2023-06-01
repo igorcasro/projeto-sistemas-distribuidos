@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -169,7 +171,12 @@ public class SolicitarListaDeIncidentes extends JFrame {
 		textFieldRodovia.setBounds(158, 12, 232, 25);
 		contentPane.add(textFieldRodovia);
 		
+		Date dataHoraAtual = new Date();
+		String data = new SimpleDateFormat("yyyy-MM-dd").format(dataHoraAtual);
+		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
+		
 		textFieldData = new JFormattedTextField(mascaraData);
+		textFieldData.setValue(data);
 		textFieldData.setToolTipText("YYYY-MM-DD");
 		textFieldData.setBounds(158, 52, 232, 25);
 		contentPane.add(textFieldData);
@@ -246,11 +253,20 @@ public class SolicitarListaDeIncidentes extends JFrame {
 		Incidente incidente = new Incidente();
 		
 		incidente.setId_operacao(5);
-		incidente.setRodovia(textFieldRodovia.getText());
+		if(textFieldRodovia.getText().equals("  -   ")) {
+			JOptionPane.showMessageDialog(null, "Não é possível buscar quando possui campos vazios.", "Solicitar Lista de Incidentes", JOptionPane.ERROR_MESSAGE);
+		} else {
+			incidente.setRodovia(textFieldRodovia.getText());
+		}
+		
 		incidente.setData(textFieldData.getText());
 		if(chckbxFaixaKm.isSelected()) {
-			incidente.setFaixa_km(textFieldKmInicio.getText()+"-"+textFieldKmFim.getText());
-		}
+			if(textFieldKmInicio.getText().isBlank() || textFieldKmFim.getText().isBlank()) {
+				JOptionPane.showMessageDialog(null, "Não é possível buscar quando possui campos vazios.", "Solicitar Lista de Incidentes", JOptionPane.ERROR_MESSAGE);
+			} else {
+				incidente.setFaixa_km(textFieldKmInicio.getText()+"-"+textFieldKmFim.getText());
+			}
+		} 
 		incidente.setPeriodo(verificarSelecaoRadioButtonPeriodo());
 		
 		Gson gson = new Gson();
@@ -259,8 +275,7 @@ public class SolicitarListaDeIncidentes extends JFrame {
 		System.out.println("Client sent: " + json);
 		out.println(json);
 		
-		try {
-			
+		try {		
 			new VerListaDeIncidentes(in).setVisible(true);
 		} catch (IOException e) {
 			

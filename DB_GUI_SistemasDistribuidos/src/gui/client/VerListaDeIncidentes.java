@@ -53,7 +53,7 @@ public class VerListaDeIncidentes extends JFrame {
 		for (Incidente incidente : incidentesLista) {
 			
 			modelo.addRow(new Object[] {incidente.getId_incidente(), incidente.getData(), incidente.getRodovia(), 
-					incidente.getKm(), incidente.getTipo_incidente()});
+					incidente.getKm(), converteTipoIncidente(incidente.getTipo_incidente())});
 		}
 		
 		
@@ -122,5 +122,39 @@ public class VerListaDeIncidentes extends JFrame {
 		scrollPane.setViewportView(tableIncidentes);
 	
 		this.buscarIncidentes(retorno);
+	}
+	
+	private String converteTipoIncidente(int tipo_incidente) {
+		
+		if(tipo_incidente == 1)
+			return "Vento";
+		if(tipo_incidente == 2)
+			return "Chuva";
+		if(tipo_incidente == 3)
+			return "Nevoeiro";
+		if(tipo_incidente == 4)
+			return "Neve";
+		if(tipo_incidente == 5)
+			return "Gelo na Pista";
+		if(tipo_incidente == 6)
+			return "Granizo";
+		if(tipo_incidente == 7)
+			return "Trânsito parado";
+		if(tipo_incidente == 8)
+			return "Filas de trânsito";
+		if(tipo_incidente == 9)
+			return "Trânsito lento";
+		if(tipo_incidente == 10)
+			return "Acidente desconhecido";
+		if(tipo_incidente == 11)
+			return "Incidente desconhecido";
+		if(tipo_incidente == 12)
+			return "Trabalhos na estrada";
+		if(tipo_incidente == 13)
+			return "Bloqueio de pista";
+		if(tipo_incidente == 14)
+			return "Bloqueio de Estrada";
+		
+		return "NÃO RECONHECIDO";
 	}
 }

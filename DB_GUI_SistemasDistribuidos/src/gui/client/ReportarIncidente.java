@@ -35,7 +35,6 @@ public class ReportarIncidente extends JFrame {
 	private JFormattedTextField textFieldData;
 	private JFormattedTextField textFieldRodovia;
 	private JFormattedTextField textFieldKm;
-	private JCheckBox chckbxKM;
 	private JComboBox comboBox;
 	private JButton btnReportar;
 	private JButton btnLimpar;
@@ -71,7 +70,7 @@ public class ReportarIncidente extends JFrame {
 
 		try {
 
-			this.mascaraData = new MaskFormatter("##-##-#### ##:##:##");
+			this.mascaraData = new MaskFormatter("####-##-## ##:##:##");
 
 		} catch (ParseException e) {
 
@@ -131,9 +130,6 @@ public class ReportarIncidente extends JFrame {
 		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
 		
 		textFieldData = new JFormattedTextField(mascaraData);
-		System.out.println(dataHoraAtual.toString());
-		System.out.println(data);
-		System.out.println(hora);
 		textFieldData.setValue(data + " " + hora);
 		textFieldData.setBounds(216, 10, 180, 25);
 		contentPane.add(textFieldData);
@@ -145,17 +141,6 @@ public class ReportarIncidente extends JFrame {
 		textFieldKm = new JFormattedTextField(mascaraKm);
 		textFieldKm.setBounds(318, 86, 78, 25);
 		contentPane.add(textFieldKm);
-		
-		chckbxKM = new JCheckBox("KM");
-		chckbxKM.setSelected(true);
-		chckbxKM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				btnKmActionPerformed();
-			}
-		});
-		chckbxKM.setBounds(8, 86, 54, 24);
-		contentPane.add(chckbxKM);
 
 		
 		comboBox = new JComboBox();
@@ -184,14 +169,10 @@ public class ReportarIncidente extends JFrame {
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.setBounds(196, 162, 99, 26);
 		contentPane.add(btnLimpar);
-	}
-	
-	private void btnKmActionPerformed() {
-		if(chckbxKM.isSelected()) {
-			textFieldKm.setEditable(true);
-		} else {
-			textFieldKm.setEditable(false);
-		}
+		
+		JLabel lblKm = new JLabel("Km:");
+		lblKm.setBounds(12, 90, 55, 16);
+		contentPane.add(lblKm);
 	}
 	
 	private void btnReportarActionPerformed() throws IOException {
@@ -201,8 +182,12 @@ public class ReportarIncidente extends JFrame {
 			Incidente incidente = new Incidente();
 			incidente.setId_operacao(4);
 			incidente.setData(textFieldData.getText());
-			incidente.setRodovia(textFieldRodovia.getText());
-			incidente.setKm(Integer.parseInt(textFieldKm.getText()));
+			if(!textFieldRodovia.getText().isBlank()) {
+				incidente.setRodovia(textFieldRodovia.getText());
+			}
+			if(!textFieldKm.getText().isBlank()) {
+				incidente.setKm(Integer.parseInt(textFieldKm.getText()));
+			} 
 			int tipoIncidente = transformaNomeEmIntComboBox(comboBox);
 			incidente.setTipo_incidente(tipoIncidente);
 			incidente.setToken(tokenReceived);

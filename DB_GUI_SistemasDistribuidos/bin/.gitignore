@@ -1,5 +1,3 @@
-/gui/
-/entities/
-/serverSocketHandler/
-/service/
 /dao/
+/service/
+/gui/

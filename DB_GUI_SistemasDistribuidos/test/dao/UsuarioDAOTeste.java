@@ -79,9 +79,9 @@ public class UsuarioDAOTeste {
 		try {
 
 //			UsuarioDAOTeste.cadastrarUsuarioTeste();
-//			UsuarioDAOTeste.buscarTodosUsuariosTeste();
+			UsuarioDAOTeste.buscarTodosUsuariosTeste();
 //			UsuarioDAOTeste.buscarUsuarioTeste();
-			UsuarioDAOTeste.logarUsuarioTeste();
+//			UsuarioDAOTeste.logarUsuarioTeste();
 
 		} catch (SQLException | IOException e) {
 

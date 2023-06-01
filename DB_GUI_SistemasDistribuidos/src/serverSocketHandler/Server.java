@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import com.google.gson.Gson;
 
@@ -138,7 +139,7 @@ import service.UsuarioService;
 			        	Retorno retorno = incidenteService.cadastrar(incident);
 			        	json = gson.toJson(retorno);
 			        	out.println(json);
-			        } catch(SQLException | GeneralErrorException gee) {
+			        } catch(SQLException | GeneralErrorException | ParseException gee) {
 	        			json = erro(gson, gee.getMessage());
 	        			out.println(json);
 			        } finally {
@@ -152,7 +153,7 @@ import service.UsuarioService;
 			        	Retorno retorno = incidenteService.buscarTodos(incident);
 			        	json = gson.toJson(retorno);
 			        	out.println(json);
-			        } catch(SQLException | GeneralErrorException gee) {
+			        } catch(SQLException | GeneralErrorException | ParseException gee) {
 	        			json = erro(gson, gee.getMessage());
 	        			out.println(json);
 			        } finally {
@@ -196,7 +197,6 @@ import service.UsuarioService;
 		errorObject.setMensagem(mensagem);
 		
 		String json = gson.toJson(errorObject);
-		System.out.println("Server sent: " + json);
 		
 		return json;
 	}
