@@ -77,6 +77,11 @@ public class ClientLogged extends JFrame {
 		menuBar.add(mnSobre);
 		
 		mntmInformacoes = new JMenuItem("Informações");
+		mntmInformacoes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Informacoes().setVisible(true);
+			}
+		});
 		mnSobre.add(mntmInformacoes);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
