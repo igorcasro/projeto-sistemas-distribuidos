@@ -10,8 +10,10 @@ import com.google.gson.Gson;
 
 import dao.BancoDados;
 import dao.IncidenteDAO;
+import dao.UsuarioDAO;
 import entities.Incidente;
 import entities.Retorno;
+import entities.Usuario;
 import exceptions.GeneralErrorException;
 
 public class IncidenteService {
@@ -50,6 +52,40 @@ public class IncidenteService {
 		}
 	}
 	
+	public Retorno atualizarIncidente(Incidente incidente) throws SQLException, IOException, GeneralErrorException {
+		
+		Connection conn = BancoDados.conectar();		
+		List<Usuario> usuarioRetorno = new UsuarioDAO(conn).buscarTodos();
+		
+		int contador = 0;
+		
+		for (Usuario user : usuarioRetorno) {
+			if(incidente.getId_usuario().equals(user.getId_usuario()) && incidente.getToken().equals(user.getToken())) {
+				break;
+			}
+			++contador;
+			
+			if(contador == usuarioRetorno.size()) {
+				throw new GeneralErrorException("Id de usuário ou token não condizem com o registro no banco de dados.");
+			}
+		}
+		
+		if(incidente.getId_usuario() != null &&
+				incidente.getToken() != null) {
+			
+			conn = BancoDados.conectar();
+			new IncidenteDAO(conn).atualizarIncidente(incidente);
+			
+			Retorno retorno = new Retorno();
+			retorno.setCodigo(200);
+			
+			return retorno;
+		} else {
+			throw new GeneralErrorException("Erro ao editar incidente.");
+		}
+		
+	}
+	
 	public Retorno buscarTodos(Incidente incidente) throws SQLException, IOException, GeneralErrorException, ParseException {
 		
 		Connection conn = BancoDados.conectar();
@@ -75,7 +111,81 @@ public class IncidenteService {
 		} else {
 			throw new GeneralErrorException("Erro ao buscar lista de incidentes.");
 		}
+	}
+	
+	public Retorno buscarPorIdUsuario(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
 		
+		Connection conn = BancoDados.conectar();
+		List<Usuario> usuarioRetorno = new UsuarioDAO(conn).buscarTodos();
+		
+		int contador = 0;
+		
+		for (Usuario user : usuarioRetorno) {
+			if(usuario.getId_usuario().equals(user.getId_usuario()) && usuario.getToken().equals(user.getToken())) {
+				break;
+			}
+			++contador;
+			
+			if(contador == usuarioRetorno.size()) {
+				throw new GeneralErrorException("Id de usuário ou token não condizem com o registro no banco de dados.");
+			}
+		}
+		
+		if(usuario.getId_usuario() != null &&
+				usuario.getToken() != null) {
+			conn = BancoDados.conectar();
+			this.listaIncidentes = new IncidenteDAO(conn).buscarPorIdUsuario(usuario);
+			
+		
+			if(listaIncidentes == null) {
+				throw new GeneralErrorException("Não há incidentes reportados.");
+			}
+			
+			Retorno retorno = new Retorno();
+			retorno.setCodigo(200);
+			retorno.setLista_incidentes(listaIncidentes);
+			
+			return retorno;
+		} else {
+			throw new GeneralErrorException("Erro ao buscar usuário.");
+		}
+	}
+	
+	public Retorno removerIncidente(Usuario usuario, Incidente incidente) throws SQLException, IOException, GeneralErrorException {
+		
+		Connection conn = BancoDados.conectar();
+		List<Usuario> usuarioRetorno = new UsuarioDAO(conn).buscarTodos();
+		
+		int contador = 0;
+		
+		for (Usuario user : usuarioRetorno) {
+			if(usuario.getId_usuario().equals(user.getId_usuario()) && usuario.getToken().equals(user.getToken())) {
+				break;
+			}
+			++contador;
+			
+			if(contador == usuarioRetorno.size()) {
+				throw new GeneralErrorException("Id de usuário ou token não condizem com o registro no banco de dados.");
+			}
+		}
+		
+		if(usuario.getId_usuario() != null &&
+				usuario.getToken() != null) {
+			
+			conn = BancoDados.conectar();
+			int linhasManipuladas = new IncidenteDAO(conn).remover(incidente);
+			
+			if(linhasManipuladas > 0) {
+				Retorno retorno = new Retorno();
+				retorno.setCodigo(200);
+				
+				return retorno;
+			} else {
+				throw new GeneralErrorException("Não foi encontrado o incidente enviado.");
+			}
+		} else {
+			throw new GeneralErrorException("Erro ao buscar usuário.");
+		}
 		
 	}
 }

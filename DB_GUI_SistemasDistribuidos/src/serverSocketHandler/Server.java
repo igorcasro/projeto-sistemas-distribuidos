@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
@@ -29,7 +30,8 @@ import service.UsuarioService;
 	    ServerSocket serverSocket = null; 
 	    connectionPort = 24001;
 	    try { 
-	    	serverSocket = new ServerSocket(connectionPort); 
+	    	InetAddress enderecoIp = InetAddress.getByName("0.0.0.0");
+	    	serverSocket = new ServerSocket(connectionPort, 0, enderecoIp); 
 	        System.out.println ("Connection Socket Created");
 	        try { 
 	        	while (true){
@@ -160,11 +162,76 @@ import service.UsuarioService;
 			        	System.out.println("Server sent: " + json);
 			        }
 	
+		    	} else if(user.getId_operacao() == 6) {
+		    		System.out.println("== Ver Incidentes Reportados ==");
+		    		
+		    		try {
+			        	Retorno retorno = incidenteService.buscarPorIdUsuario(user);
+			        	json = gson.toJson(retorno);
+			        	out.println(json);
+			        } catch(SQLException | GeneralErrorException gee) {
+	        			json = erro(gson, gee.getMessage());
+	        			out.println(json);
+			        } finally {
+			        	System.out.println("Server sent: " + json);
+			        }
+	
+		    	} else if(user.getId_operacao() == 7) {
+		    		System.out.println("== Remover Incidente ==");
+		    		
+		    		try {
+		    			Usuario userSent = new Usuario();
+		    			userSent.setId_usuario(incident.getId_usuario());
+		    			userSent.setToken(incident.getToken());
+		    			
+			        	Retorno retorno = incidenteService.removerIncidente(userSent, incident);
+			        	json = gson.toJson(retorno);
+			        	out.println(json);
+			        } catch(SQLException | GeneralErrorException gee) {
+	        			json = erro(gson, gee.getMessage());
+	        			out.println(json);
+			        } finally {
+			        	System.out.println("Server sent: " + json);
+			        }
+	
+		    	} else if(user.getId_operacao() == 8) {
+		    		System.out.println("== Remover Usuário ==");
+		    		
+		    		try {
+		    			Usuario userSent = new Usuario();
+		    			userSent.setId_usuario(user.getId_usuario());
+		    			userSent.setToken(user.getToken());
+		    			userSent.setEmail(user.getEmail());
+		    			userSent.setSenha(user.getSenha());
+		    			
+			        	Retorno retorno = usuarioService.removerUsuario(userSent);
+			        	json = gson.toJson(retorno);
+			        	out.println(json);
+			        } catch(SQLException | GeneralErrorException gee) {
+	        			json = erro(gson, gee.getMessage());
+	        			out.println(json);
+			        } finally {
+			        	System.out.println("Server sent: " + json);
+			        }
+	
 		    	} else if(user.getId_operacao() == 9) {
 		    		System.out.println("==== Deslogar ====");
 		    		
 		    		try {
 			        	Retorno retorno = usuarioService.deslogar(user);
+			        	json = gson.toJson(retorno);
+			        	out.println(json);
+			        } catch(SQLException | GeneralErrorException gee) {
+	        			json = erro(gson, gee.getMessage());
+	        			out.println(json);
+			        } finally {
+			        	System.out.println("Server sent: " + json);
+			        }
+		    	} else if(user.getId_operacao() == 10) {
+		    		System.out.println("==== Editar Incidente ====");
+		    		
+		    		try {
+			        	Retorno retorno = incidenteService.atualizarIncidente(incident);
 			        	json = gson.toJson(retorno);
 			        	out.println(json);
 			        } catch(SQLException | GeneralErrorException gee) {

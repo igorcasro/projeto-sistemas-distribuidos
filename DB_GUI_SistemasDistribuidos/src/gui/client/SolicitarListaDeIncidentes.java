@@ -26,6 +26,7 @@ import javax.swing.text.MaskFormatter;
 import com.google.gson.Gson;
 
 import entities.Incidente;
+import exceptions.GeneralErrorException;
 
 public class SolicitarListaDeIncidentes extends JFrame {
 
@@ -173,7 +174,6 @@ public class SolicitarListaDeIncidentes extends JFrame {
 		
 		Date dataHoraAtual = new Date();
 		String data = new SimpleDateFormat("yyyy-MM-dd").format(dataHoraAtual);
-		String hora = new SimpleDateFormat("HH:mm:ss").format(dataHoraAtual);
 		
 		textFieldData = new JFormattedTextField(mascaraData);
 		textFieldData.setValue(data);
@@ -237,7 +237,13 @@ public class SolicitarListaDeIncidentes extends JFrame {
 		btnSolicitar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			
-				btnSolicitarActionPerformed();
+				try {
+					btnSolicitarActionPerformed();
+				} catch (GeneralErrorException e1) {
+					// TODO Auto-generated catch block
+					errorCaught(e1);
+					
+				}
 			}
 		});
 		btnSolicitar.setBounds(305, 223, 85, 21);
@@ -248,21 +254,21 @@ public class SolicitarListaDeIncidentes extends JFrame {
 		contentPane.add(btnLimpar);
 	}
 	
-	private void btnSolicitarActionPerformed() {
+	private void btnSolicitarActionPerformed() throws GeneralErrorException {
 		
 		Incidente incidente = new Incidente();
 		
 		incidente.setId_operacao(5);
 		if(textFieldRodovia.getText().equals("  -   ")) {
-			JOptionPane.showMessageDialog(null, "Não é possível buscar quando possui campos vazios.", "Solicitar Lista de Incidentes", JOptionPane.ERROR_MESSAGE);
+			throw new GeneralErrorException("Não é possível buscar quando possui campos vazios.");	
 		} else {
 			incidente.setRodovia(textFieldRodovia.getText());
 		}
 		
-		incidente.setData(textFieldData.getText());
+		incidente.setData(textFieldData.getText() + " " + "00:00:00");
 		if(chckbxFaixaKm.isSelected()) {
 			if(textFieldKmInicio.getText().isBlank() || textFieldKmFim.getText().isBlank()) {
-				JOptionPane.showMessageDialog(null, "Não é possível buscar quando possui campos vazios.", "Solicitar Lista de Incidentes", JOptionPane.ERROR_MESSAGE);
+				throw new GeneralErrorException("Não é possível buscar quando possui campos vazios.");		
 			} else {
 				incidente.setFaixa_km(textFieldKmInicio.getText()+"-"+textFieldKmFim.getText());
 			}
@@ -294,5 +300,11 @@ public class SolicitarListaDeIncidentes extends JFrame {
 			textFieldKmInicio.setEditable(false);
 			textFieldKmFim.setEditable(false);
 		}
+	}
+	
+	private void errorCaught(GeneralErrorException gee) {
+
+		JOptionPane.showMessageDialog(null, gee.getMessage(), "Solicitar Lista de Incidentes", JOptionPane.ERROR_MESSAGE);
+		this.dispose();
 	}
 }

@@ -147,26 +147,45 @@ public class ClientLogged extends JFrame {
 		contentPane.add(btnVerListaDeIncidentes);
 		
 		btnRemoverCadastro = new JButton("Remover Cadastro");
-		btnRemoverCadastro.setEnabled(false);
-//		btnRemoverCadastro.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//			
-//				new RemoverCadastro(cliente).setVisible(true);
-//			}
-//		});
+		btnRemoverCadastro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				btnRemoverCadastroActionPerformed();
+			}
+		});
 		
 		JButton btnVerIncidentesReportados = new JButton("Ver Incidentes Reportados");
-		btnVerIncidentesReportados.setEnabled(false);
+		btnVerIncidentesReportados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				try {
+					btnVerIncidentesReportadosActionPerformed();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnVerIncidentesReportados.setBounds(96, 230, 256, 25);
 		contentPane.add(btnVerIncidentesReportados);
 		
 		btnEditarIncidente = new JButton("Editar Incidente");
-		btnEditarIncidente.setEnabled(false);
+		btnEditarIncidente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				btnEditarIncidenteActionPerformed();
+			}
+		});
 		btnEditarIncidente.setBounds(96, 267, 256, 25);
 		contentPane.add(btnEditarIncidente);
 		
 		JButton btnRemoverIncidente = new JButton("Remover Incidente");
-		btnRemoverIncidente.setEnabled(false);
+		btnRemoverIncidente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				btnRemoverIncidenteActionPerformed();
+			}
+		});
 		btnRemoverIncidente.setBounds(96, 304, 256, 25);
 		contentPane.add(btnRemoverIncidente);
 		btnRemoverCadastro.setBounds(96, 341, 256, 25);
@@ -210,6 +229,39 @@ public class ClientLogged extends JFrame {
 	
 	public void btnReportarIncidenteActionPerformed() {
 		new ReportarIncidente(out, in, usuarioLogado.getToken(), usuarioLogado.getId_usuario()).setVisible(true);;
+	}
+	
+	public void btnRemoverCadastroActionPerformed() {
+		new RemoverCadastro(this, clientUnloggedWindow, out, in ,usuarioLogado).setVisible(true);
+	}
+	
+	public void btnVerIncidentesReportadosActionPerformed() throws IOException {
+		
+		try {
+			usuarioLogado.setId_operacao(6);
+			
+			Gson gson = new Gson();
+			
+			String json = gson.toJson(usuarioLogado);
+			System.out.println("Client sent: " + json);
+			out.println(json);
+			
+			new VerListaDeIncidentes(in).setVisible(true);
+			
+		}	catch (IOException e) {
+			
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Solicitar Incidentes Reportados", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+	
+	public void btnEditarIncidenteActionPerformed() {
+		
+		new VerIncidentesEditarIncidente(out, in, usuarioLogado).setVisible(true);
+	}
+	
+	public void btnRemoverIncidenteActionPerformed() {
+		new RemoverIncidente(out, in, usuarioLogado).setVisible(true);
 	}
 	
 	public void btnDeslogarActionPerformed() throws IOException {

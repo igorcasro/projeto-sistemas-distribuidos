@@ -104,8 +104,7 @@ public class UsuarioDAO {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 
-		try {
-
+		try {			
 			st = conn.prepareStatement("select * from usuario where email = ? and senha = ?");
 
 			st.setString(1, usuario.getEmail());
@@ -173,6 +172,27 @@ public class UsuarioDAO {
 			
 		} finally {
 			
+			BancoDados.finalizarStatement(st);
+			BancoDados.desconectar();
+		}
+		
+	}
+	
+	public int remover(Usuario usuario) throws SQLException {
+		
+		PreparedStatement st = null;
+		
+		try {
+			
+			st = conn.prepareStatement("delete from usuario where id_usuario = ?");
+			
+			st.setInt(1, usuario.getId_usuario());
+			
+			int linhasManipuladas = st.executeUpdate();
+			
+			return linhasManipuladas;
+		} finally {
+
 			BancoDados.finalizarStatement(st);
 			BancoDados.desconectar();
 		}

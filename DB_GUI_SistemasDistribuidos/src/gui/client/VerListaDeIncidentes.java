@@ -106,6 +106,7 @@ public class VerListaDeIncidentes extends JFrame {
 //		"id_incidente": id_incidente, "data": date, "rodovia": "rodovia", "km": km, "tipo_incidente": tipo_incidente
 		
 		tableIncidentes = new JTable();
+		tableIncidentes.setRowSelectionAllowed(false);
 		tableIncidentes.setModel(new DefaultTableModel(
 			new Object[][] {
 			},

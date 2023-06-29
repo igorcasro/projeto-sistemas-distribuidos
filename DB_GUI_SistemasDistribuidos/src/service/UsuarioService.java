@@ -182,6 +182,44 @@ public class UsuarioService {
 		return retorno;
 	}
 	
+	public Retorno removerUsuario(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
+		
+		Connection conn = BancoDados.conectar();
+		Usuario usuarioRetorno = new Usuario();
+		usuarioRetorno = new UsuarioDAO(conn).buscarUsuario(usuario);
+		
+		if(usuarioRetorno != null) {
+			if(usuario.getEmail().equals(usuarioRetorno.getEmail())) {
+				if(usuario.getSenha().equals(usuarioRetorno.getSenha())) {
+					if(usuario.getToken().equals(usuarioRetorno.getToken()) &&
+							usuario.getId_usuario().equals(usuarioRetorno.getId_usuario())) {
+						conn = BancoDados.conectar();
+						int linhasManipuladas = new UsuarioDAO(conn).remover(usuario);
+								
+						if(linhasManipuladas > 0) {
+							Retorno retorno = new Retorno();
+							retorno.setCodigo(200);
+									
+							return retorno;
+						} else {
+							throw new GeneralErrorException("Não foi encontrado o usuário especificado para remoção.");
+						}
+					} else {
+						throw new GeneralErrorException("Token ou Id de usuário incorretos.");
+					}
+					
+				} else {
+					throw new GeneralErrorException("Senha incorreta.");
+				}
+			} else {
+				throw new GeneralErrorException("E-mail incorreto.");
+			}
+		} else {
+			throw new GeneralErrorException("Usuário não encontrado");
+		}
+		
+	}
+	
 	//Verificações e Funções Extras
 	
 	private boolean verificaNome(String nome) {
