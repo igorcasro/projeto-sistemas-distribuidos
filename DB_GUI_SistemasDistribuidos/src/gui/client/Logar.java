@@ -20,12 +20,13 @@ import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
 import listener.UsuarioListener;
+import javax.swing.JFormattedTextField;
+import javax.swing.JPasswordField;
 
 public class Logar extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldEmail;
-	private JTextField textFieldSenha;
 	private JLabel lblEmail;
 	private JLabel lblSenha;
 	private JButton btnLogar;
@@ -35,6 +36,7 @@ public class Logar extends JFrame {
 	
 	private PrintWriter out;
 	private BufferedReader in;
+	private JPasswordField textFieldSenha;
 	
 	/**
 	 * Create the frame.
@@ -72,11 +74,6 @@ public class Logar extends JFrame {
 		lblSenha.setBounds(12, 45, 70, 15);
 		contentPane.add(lblSenha);
 		
-		textFieldSenha = new JTextField();
-		textFieldSenha.setColumns(10);
-		textFieldSenha.setBounds(59, 40, 379, 25);
-		contentPane.add(textFieldSenha);
-		
 		btnLogar = new JButton("Logar");
 		btnLogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -95,6 +92,10 @@ public class Logar extends JFrame {
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.setBounds(201, 87, 117, 25);
 		contentPane.add(btnLimpar);
+		
+		textFieldSenha = new JPasswordField();
+		textFieldSenha.setBounds(59, 45, 379, 25);
+		contentPane.add(textFieldSenha);
 	}
 
 	private void btnLogarActionPerformed() throws IOException {

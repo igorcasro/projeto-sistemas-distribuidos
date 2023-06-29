@@ -19,12 +19,12 @@ import com.google.gson.Gson;
 import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
+import javax.swing.JPasswordField;
 
 public class Cadastrar extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldNome;
-	private JTextField textFieldSenha;
 	private JTextField textFieldEmail;
 	private JLabel lblNome;
 	private JLabel lblEmail;
@@ -34,6 +34,7 @@ public class Cadastrar extends JFrame {
 	
 	private PrintWriter out;
 	private BufferedReader in;
+	private JPasswordField textFieldSenha;
 	
 	/**
 	 * Create the frame.
@@ -79,11 +80,6 @@ public class Cadastrar extends JFrame {
 		lblSenha.setBounds(12, 81, 70, 15);
 		contentPane.add(lblSenha);
 		
-		textFieldSenha = new JTextField();
-		textFieldSenha.setColumns(10);
-		textFieldSenha.setBounds(59, 73, 379, 25);
-		contentPane.add(textFieldSenha);
-		
 		btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -103,6 +99,10 @@ public class Cadastrar extends JFrame {
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.setBounds(201, 116, 117, 25);
 		contentPane.add(btnLimpar);
+		
+		textFieldSenha = new JPasswordField();
+		textFieldSenha.setBounds(59, 74, 379, 25);
+		contentPane.add(textFieldSenha);
 	}
 	
 	

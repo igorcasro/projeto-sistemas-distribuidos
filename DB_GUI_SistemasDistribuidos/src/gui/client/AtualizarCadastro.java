@@ -19,12 +19,12 @@ import com.google.gson.Gson;
 import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
+import javax.swing.JPasswordField;
 
 public class AtualizarCadastro extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldNome;
-	private JTextField textFieldSenha;
 	private JTextField textFieldEmail;
 	private JLabel lblNome;
 	private JLabel lblEmail;
@@ -39,6 +39,7 @@ public class AtualizarCadastro extends JFrame {
 	
 	private ClientLogged clientLogged;
 	private ClientUnlogged clientUnloggedWindow;
+	private JPasswordField textFieldSenha;
 	
 	/**
 	 * Create the frame.
@@ -90,11 +91,6 @@ public class AtualizarCadastro extends JFrame {
 		lblSenha.setBounds(12, 86, 70, 15);
 		contentPane.add(lblSenha);
 		
-		textFieldSenha = new JTextField();
-		textFieldSenha.setColumns(10);
-		textFieldSenha.setBounds(59, 81, 379, 25);
-		contentPane.add(textFieldSenha);
-		
 		btnAtualizar = new JButton("Atualizar");
 		btnAtualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -113,6 +109,10 @@ public class AtualizarCadastro extends JFrame {
 		btnLimpar = new JButton("Limpar");
 		btnLimpar.setBounds(201, 116, 117, 25);
 		contentPane.add(btnLimpar);
+		
+		textFieldSenha = new JPasswordField();
+		textFieldSenha.setBounds(59, 83, 379, 25);
+		contentPane.add(textFieldSenha);
 	}
 	
 	private void btnAtualizarActionPerformed() throws IOException {
