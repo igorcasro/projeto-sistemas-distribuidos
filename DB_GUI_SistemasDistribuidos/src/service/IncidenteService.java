@@ -27,6 +27,17 @@ public class IncidenteService {
 	
 	public Retorno cadastrar(Incidente incidente) throws SQLException, IOException, GeneralErrorException, ParseException {
 		
+		if(incidente.getId_operacao() == null ||
+				incidente.getData().isBlank() ||
+				incidente.getRodovia().isBlank() ||
+				incidente.getKm() == null ||
+				incidente.getTipo_incidente() == null ||
+				incidente.getToken().isBlank() ||
+				incidente.getId_usuario() == null) {
+			
+			throw new GeneralErrorException("Campos nulos.");
+		}
+		
 		Connection conn = BancoDados.conectar();
 		
 		if(incidente.getData().isBlank() || incidente.getRodovia().isBlank() || incidente.getKm() == null) {
@@ -53,6 +64,18 @@ public class IncidenteService {
 	}
 	
 	public Retorno atualizarIncidente(Incidente incidente) throws SQLException, IOException, GeneralErrorException {
+		
+		if(incidente.getId_operacao() == null ||
+				incidente.getData().isBlank() ||
+				incidente.getRodovia().isBlank() ||
+				incidente.getKm() == null ||
+				incidente.getTipo_incidente() == null ||
+				incidente.getToken().isBlank() ||
+				incidente.getId_incidente() == null ||
+				incidente.getId_usuario() == null) {
+			
+			throw new GeneralErrorException("Campos nulos.");
+		}
 		
 		Connection conn = BancoDados.conectar();		
 		List<Usuario> usuarioRetorno = new UsuarioDAO(conn).buscarTodos();
@@ -88,6 +111,14 @@ public class IncidenteService {
 	
 	public Retorno buscarTodos(Incidente incidente) throws SQLException, IOException, GeneralErrorException, ParseException {
 		
+		if(incidente.getId_operacao() == null ||
+				incidente.getData().isBlank() ||
+				incidente.getRodovia().isBlank() ||
+				incidente.getPeriodo() == null) {
+			
+			throw new GeneralErrorException("Campos nulos.");
+		}
+		
 		Connection conn = BancoDados.conectar();
 		
 		if(incidente.getData() != null &&
@@ -114,6 +145,13 @@ public class IncidenteService {
 	}
 	
 	public Retorno buscarPorIdUsuario(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
+		
+		if(usuario.getId_operacao() == null ||
+				usuario.getToken().isBlank() ||
+				usuario.getId_usuario() == null) {
+			
+			throw new GeneralErrorException("Campos nulos.");
+		}
 		
 		Connection conn = BancoDados.conectar();
 		List<Usuario> usuarioRetorno = new UsuarioDAO(conn).buscarTodos();
@@ -152,6 +190,14 @@ public class IncidenteService {
 	}
 	
 	public Retorno removerIncidente(Usuario usuario, Incidente incidente) throws SQLException, IOException, GeneralErrorException {
+		
+		if(incidente.getId_operacao() == null ||
+				incidente.getId_incidente() == null ||
+				incidente.getToken().isBlank() ||
+				incidente.getId_usuario() == null) {
+			
+			throw new GeneralErrorException("Campos nulos.");
+		}
 		
 		Connection conn = BancoDados.conectar();
 		List<Usuario> usuarioRetorno = new UsuarioDAO(conn).buscarTodos();

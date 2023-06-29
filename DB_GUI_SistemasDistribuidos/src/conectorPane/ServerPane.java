@@ -2,8 +2,6 @@ package conectorPane;
 
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,18 +11,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import serverSocketHandler.Server;
+import serverSocketHandler.ListaUsuariosLogados;
 
 public class ServerPane extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldPorta;
-
-	private int connectionPort;
 	private JButton btnAbrirConexao;
 	private JLabel lblPorta;
-	
-	static int count = 0;
 	
 	/**
 	 * Launch the application.
@@ -71,38 +65,20 @@ public class ServerPane extends JFrame {
 		contentPane.add(textFieldPorta);
 		
 		btnAbrirConexao = new JButton("Abrir Conexão");
-		btnAbrirConexao.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				btnAbrirConexaoActionPerformed();
-				e.getActionCommand();
-			}
-		});
+		btnAbrirConexao.addActionListener(e -> {
+	            String valor = textFieldPorta.getText();
+	            dispose();
+	        });
 		btnAbrirConexao.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnAbrirConexao.setBounds(215, 57, 151, 21);
 		contentPane.add(btnAbrirConexao);
 	}
 	
-	private void btnAbrirConexaoActionPerformed() {
-		
+	public String getValor() {
 		if(textFieldPorta.getText().equals("")) {
-			connectionPort = 24001;
-		} else {
-			connectionPort = Integer.parseInt(textFieldPorta.getText());
+			return "24001";
 		}
 		
-		try {
-			new Server(connectionPort);
-			count++;
-			if(count == 1)
-				Server.main(null);
-//			this.dispose();
-			JOptionPane.showMessageDialog(null, "Conexão aberta.", "Conexão - Servidor", JOptionPane.INFORMATION_MESSAGE);
-		} catch(Exception ex) {
-			JOptionPane.showMessageDialog(null, "Problema ao conectar à porta especificada.", "Conexão - Servidor", JOptionPane.ERROR_MESSAGE);
-			System.out.println(ex.getMessage());
-			System.exit(1);
-		}
-		
-	}
+        return textFieldPorta.getText();
+    }
 }

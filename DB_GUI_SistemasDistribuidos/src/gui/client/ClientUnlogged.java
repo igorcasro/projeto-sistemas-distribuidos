@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import clientSocketHandler.Cliente;
+import serverSocketHandler.Server;
 
 public class ClientUnlogged extends JFrame {
 
@@ -36,7 +37,6 @@ public class ClientUnlogged extends JFrame {
 	private JButton btnCadastrar;
 	private JButton btnLogar;
 	private JButton btnVerListaDeIncidentes;
-	private JButton btnRemoverCadastro;
 
 	private String ip;
 	private int connectionPort;
@@ -79,7 +79,7 @@ public class ClientUnlogged extends JFrame {
          // Aqui inicia o Frame ClientUnlogged
     		setTitle("Client");
     		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    		setBounds(100, 100, 398, 253);
+    		setBounds(100, 100, 398, 213);
     		
     		menuBar = new JMenuBar();
     		setJMenuBar(menuBar);
@@ -130,17 +130,6 @@ public class ClientUnlogged extends JFrame {
     			}
     		});
     		contentPane.add(btnVerListaDeIncidentes);
-    		
-    		btnRemoverCadastro = new JButton("Remover Cadastro");
-    		btnRemoverCadastro.setEnabled(false);
-    		btnRemoverCadastro.setBounds(88, 159, 219, 25);
-//    		btnRemoverCadastro.addActionListener(new ActionListener() {
-//    			public void actionPerformed(ActionEvent e) {
-//    			
-//    				new RemoverCadastro(cliente).setVisible(true);
-//    			}
-//    		});
-    		contentPane.add(btnRemoverCadastro);
     		
     		JLabel lblPorta = new JLabel("Porta:");
     		lblPorta.setFont(new Font("Dialog", Font.BOLD, 16));

@@ -1,4 +1,10 @@
+/clientSocketHandler/
+/conectorPane/
+/dao/
+/entities/
+/enums/
+/exceptions/
 /gui/
 /serverSocketHandler/
 /service/
-/dao/
+/listener/

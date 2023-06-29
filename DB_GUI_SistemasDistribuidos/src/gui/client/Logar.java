@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
+import listener.UsuarioListener;
 
 public class Logar extends JFrame {
 
@@ -118,8 +119,12 @@ public class Logar extends JFrame {
 			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
 			
 			if(retorno.getCodigo().equals(200)) {
-				JOptionPane.showMessageDialog(null, "Usuário logado com sucesso.", "Login de Usuário", JOptionPane.INFORMATION_MESSAGE);
 				
+				UsuarioListener usuarioListener = new UsuarioListener();
+				usuarioListener.notifyUsuariosLogadosChanged();
+				
+				JOptionPane.showMessageDialog(null, "Usuário logado com sucesso.", "Login de Usuário", JOptionPane.INFORMATION_MESSAGE);
+
 				usuarioLogado = new Usuario();
 				usuarioLogado.setToken(retorno.getToken());
 				usuarioLogado.setId_usuario(retorno.getId_usuario());

@@ -3,6 +3,7 @@ package service;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -12,16 +13,29 @@ import dao.UsuarioDAO;
 import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
+import listener.UsuarioListener;
 
 public class UsuarioService {
 
 	Gson gson;
 	
+	private UsuarioListener usuarioListener;
+	private List<Usuario> listaUsuariosLogados;
+	
 	public UsuarioService() {
 		
+		this.listaUsuariosLogados = new ArrayList<>();
+		this.usuarioListener = new UsuarioListener();
 	}
 	
 	public Retorno cadastrar(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
+		
+		if(usuario.getId_operacao() == null ||  
+				usuario.getNome() == null ||
+				usuario.getEmail() == null ||
+				usuario.getSenha() == null ) {
+			throw new GeneralErrorException("Campos nulos.");
+		}
 		
 		Connection conn = BancoDados.conectar();
 		Usuario usuarioRetorno = new UsuarioDAO(conn).buscarUsuario(usuario);
@@ -54,10 +68,19 @@ public class UsuarioService {
 	
 	public Retorno atualizarCadastro(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
 		
+		if(usuario.getId_operacao() == null ||  
+				usuario.getNome().isBlank() ||
+				usuario.getEmail().isBlank() ||
+				usuario.getSenha().isBlank() ||
+				usuario.getToken().isBlank() ||
+				usuario.getId_usuario() == null) {
+			throw new GeneralErrorException("Campos nulos.");
+		}
+		
 		Connection conn = BancoDados.conectar();
 		Usuario usuarioRetorno = new UsuarioDAO(conn).buscarUsuario(usuario);
 		
-		if(usuarioRetorno == null || usuarioRetorno.getEmail() == null) {
+		if(usuarioRetorno == null || usuarioRetorno.getEmail().equals(usuario.getEmail()) || usuarioRetorno.getEmail() == null) {
 			if(!this.verificaNome(usuario.getNome())) {
 				throw new GeneralErrorException("Nome inválido.");
 			}
@@ -91,6 +114,12 @@ public class UsuarioService {
 	
 	public Retorno logar(Usuario usuario) throws SQLException, IOException, GeneralErrorException{
 		
+		if(usuario.getId_operacao() == null ||
+				usuario.getEmail() == null ||
+				usuario.getSenha() == null ) {
+			throw new GeneralErrorException("Campos nulos.");
+		}
+		
 		Connection conn = BancoDados.conectar();
 		List<Usuario> listaUsuarios = new UsuarioDAO(conn).buscarTodos();
 
@@ -111,6 +140,8 @@ public class UsuarioService {
 							
 							conn = BancoDados.conectar();
 							Usuario usuarioLogado = new UsuarioDAO(conn).buscarUsuario(usuario);
+			
+//							usuarioListener.notifyUsuariosLogadosChanged();
 							
 							Retorno retorno = new Retorno();
 							retorno.setCodigo(200);
@@ -142,6 +173,12 @@ public class UsuarioService {
 	
 	public Retorno deslogar(Usuario usuario) throws SQLException, IOException, GeneralErrorException{
 		
+		if(usuario.getId_operacao() == null ||
+				usuario.getToken().isBlank() ||
+				usuario.getId_usuario() == null) {
+			throw new GeneralErrorException("Campos nulos.");
+		}
+		
 		Connection conn = BancoDados.conectar();
 		List<Usuario> listaUsuarios = new UsuarioDAO(conn).buscarTodos();
 		
@@ -152,6 +189,8 @@ public class UsuarioService {
 					if(usuariosRecuperados.getId_usuario().equals(usuario.getId_usuario())) {
 						if(usuariosRecuperados.getToken() != null) {
 							usuario.setToken(null);
+							
+//							usuarioListener.notifyUsuariosLogadosChanged();
 							
 							conn = BancoDados.conectar();
 							new UsuarioDAO(conn).deslogarUsuario(usuario);
@@ -183,6 +222,14 @@ public class UsuarioService {
 	}
 	
 	public Retorno removerUsuario(Usuario usuario) throws SQLException, IOException, GeneralErrorException {
+
+		if(usuario.getId_operacao() == null || 
+				usuario.getEmail().isBlank() ||
+				usuario.getSenha().isBlank() ||
+				usuario.getToken().isBlank() ||
+				usuario.getId_usuario() == null) {
+			throw new GeneralErrorException("Campos nulos.");
+		}		
 		
 		Connection conn = BancoDados.conectar();
 		Usuario usuarioRetorno = new Usuario();
@@ -220,6 +267,27 @@ public class UsuarioService {
 		
 	}
 	
+	public List<Usuario> buscarUsuariosLogados() throws SQLException, IOException {
+		
+		Connection conn = BancoDados.conectar();
+		List<Usuario> listaUsuarioRetorno = new UsuarioDAO(conn).buscarTodos();
+		
+		if(listaUsuarioRetorno != null) {
+			for(Usuario usuario : listaUsuarioRetorno) {
+				if(usuario.getEmail() != null) {
+					if(usuario.getToken() != null) {
+
+						listaUsuariosLogados.add(usuario);
+					}
+				}		
+			}
+		}
+		
+		
+		System.out.println(listaUsuariosLogados);
+		
+		return listaUsuariosLogados;
+	}
 	//Verificações e Funções Extras
 	
 	private boolean verificaNome(String nome) {
