@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -204,12 +203,22 @@ public class ReportarIncidente extends JFrame {
 			System.out.println("Server sent: " + jsonRetorno);
 			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
 		
-			if(retorno.getCodigo().equals(200)) {
-				JOptionPane.showMessageDialog(null, "Incidente reportado com sucesso.", "Reportar incidente", JOptionPane.INFORMATION_MESSAGE);
-		
-			} else {
-				throw new GeneralErrorException("Erro ao reportar incidente.");
+			if(retorno == null) {
+				throw new GeneralErrorException("Retorno nulo!");
 			}
+			
+			try {
+				if(retorno.getCodigo().equals(200)) {
+					JOptionPane.showMessageDialog(null, "Incidente reportado com sucesso.", "Reportar incidente", JOptionPane.INFORMATION_MESSAGE);
+			
+				} else {
+					throw new GeneralErrorException("Erro ao reportar incidente.");
+				}
+			} catch(NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(null, "Código enviado não é número.", "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
+			}
+			
+			
 		} catch (GeneralErrorException gee) {
 			
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Reportar incidente", JOptionPane.ERROR_MESSAGE);

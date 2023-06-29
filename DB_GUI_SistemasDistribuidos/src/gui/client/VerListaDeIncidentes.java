@@ -69,13 +69,22 @@ public class VerListaDeIncidentes extends JFrame {
 			System.out.println("Server sent: " + jsonRetorno);
 			retorno = gson.fromJson(jsonRetorno, Retorno.class);
 			
-			if(retorno.getCodigo().equals(200)) {
-				
-				JOptionPane.showMessageDialog(null, "Lista de incidentes recuperada com sucesso.", "Solicitar Lista de Incidentes", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				
-				throw new GeneralErrorException("Erro ao buscar lista de incidentes.");
+			if (retorno == null) {
+				throw new GeneralErrorException("Retorno nulo!");
 			}
+			
+			try {
+				if(retorno.getCodigo().equals(200)) {
+					
+					JOptionPane.showMessageDialog(null, "Lista de incidentes recuperada com sucesso.", "Solicitar Lista de Incidentes", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					
+					throw new GeneralErrorException("Erro ao buscar lista de incidentes.");
+				}	
+			} catch(NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(null, "Código enviado não é número.", "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
+			}
+			
 		} catch (GeneralErrorException gee) {
 			
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Solicitar Lista de Incidentes", JOptionPane.ERROR_MESSAGE);

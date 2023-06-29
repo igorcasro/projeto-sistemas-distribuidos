@@ -139,8 +139,6 @@ import service.UsuarioService;
 			    System.out.println("\nClient sent: " + inputLine);
 		        		       
 			    try {
-			    	int idOperacao = Integer.valueOf(user.getId_operacao());
-			    
 			    	if(user.getId_operacao() == 1) {
 				    	System.out.println("==== Cadastrar ====");
 				        		

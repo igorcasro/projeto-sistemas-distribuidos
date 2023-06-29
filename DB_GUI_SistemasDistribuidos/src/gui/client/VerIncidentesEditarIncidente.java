@@ -1,7 +1,6 @@
 package gui.client;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,8 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import com.google.gson.Gson;
 
 import entities.Incidente;
 import entities.Retorno;
@@ -97,6 +94,11 @@ public class VerIncidentesEditarIncidente extends JFrame {
 		
 		try {
 			Retorno retorno = this.incidenteService.buscarPorIdUsuario(usuario);
+			
+			if(retorno == null) {
+				throw new GeneralErrorException("Retorno nulo!");
+			}
+			
 			incidentes = retorno.getLista_incidentes();
 			
 			for (Incidente incidente : incidentes) {
@@ -119,8 +121,7 @@ public class VerIncidentesEditarIncidente extends JFrame {
 			incidente.setId_operacao(10);
 			incidente.setToken(usuario.getToken());
 			incidente.setId_usuario(usuario.getId_usuario());
-					
-			
+
 			new EditarIncidente(out, in, incidente).setVisible(true);
 		} finally {
 			

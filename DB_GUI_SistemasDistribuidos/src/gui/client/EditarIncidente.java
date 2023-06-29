@@ -1,13 +1,11 @@
 package gui.client;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -24,7 +22,6 @@ import com.google.gson.Gson;
 
 import entities.Incidente;
 import entities.Retorno;
-import entities.Usuario;
 import exceptions.GeneralErrorException;
 
 public class EditarIncidente extends JFrame {
@@ -206,12 +203,23 @@ public class EditarIncidente extends JFrame {
 			System.out.println("Server sent: " + jsonRetorno);
 			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
 		
-			if(retorno.getCodigo().equals(200)) {
-				JOptionPane.showMessageDialog(null, "Incidente editado com sucesso.", "Editar incidente", JOptionPane.INFORMATION_MESSAGE);
-		
-			} else {
-				throw new GeneralErrorException("Erro ao editar incidente.");
+			if(retorno == null) {
+				throw new GeneralErrorException("Retorno nulo!");
 			}
+			
+			try {
+				if(retorno.getCodigo().equals(200)) {
+					JOptionPane.showMessageDialog(null, "Incidente editado com sucesso.", "Editar incidente", JOptionPane.INFORMATION_MESSAGE);
+			
+				} else {
+					throw new GeneralErrorException("Erro ao editar incidente.");
+				}	
+				
+			} catch(NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(null, "Código enviado não é número.", "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
+			}
+			
+			
 		} catch (GeneralErrorException gee) {
 			
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Editar incidente", JOptionPane.ERROR_MESSAGE);

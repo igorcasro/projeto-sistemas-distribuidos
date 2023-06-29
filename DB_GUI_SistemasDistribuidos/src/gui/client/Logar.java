@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -20,8 +21,6 @@ import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
 import listener.UsuarioListener;
-import javax.swing.JFormattedTextField;
-import javax.swing.JPasswordField;
 
 public class Logar extends JFrame {
 
@@ -119,22 +118,39 @@ public class Logar extends JFrame {
 			System.out.println("Server sent: " + jsonRetorno);
 			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
 			
-			if(retorno.getCodigo().equals(200)) {
-				
-				UsuarioListener usuarioListener = new UsuarioListener();
-				usuarioListener.notifyUsuariosLogadosChanged();
-				
-				JOptionPane.showMessageDialog(null, "Usuário logado com sucesso.", "Login de Usuário", JOptionPane.INFORMATION_MESSAGE);
-
-				usuarioLogado = new Usuario();
-				usuarioLogado.setToken(retorno.getToken());
-				usuarioLogado.setId_usuario(retorno.getId_usuario());
-				
-				clientUnloggedWindow.setVisible(false);			
-				new ClientLogged(out, in, clientUnloggedWindow, usuarioLogado).setVisible(true);			
-			} else {
-				throw new GeneralErrorException("Erro ao logar usuário");
+			if(retorno == null) {
+				throw new GeneralErrorException("Retorno nulo!");
 			}
+			
+			if(retorno.getToken() == null){
+				throw new GeneralErrorException("Token nulo!");
+			}
+			
+			if(retorno.getId_usuario() == null){
+				throw new GeneralErrorException("Id de usuário nulo!");
+			}
+			
+			try {
+				if(retorno.getCodigo().equals(200)) {
+					
+					UsuarioListener usuarioListener = new UsuarioListener();
+					usuarioListener.notifyUsuariosLogadosChanged();
+					
+					JOptionPane.showMessageDialog(null, "Usuário logado com sucesso.", "Login de Usuário", JOptionPane.INFORMATION_MESSAGE);
+	
+					usuarioLogado = new Usuario();
+					usuarioLogado.setToken(retorno.getToken());
+					usuarioLogado.setId_usuario(retorno.getId_usuario());
+					
+					clientUnloggedWindow.setVisible(false);			
+					new ClientLogged(out, in, clientUnloggedWindow, usuarioLogado).setVisible(true);			
+				} else {
+					throw new GeneralErrorException("Erro ao logar usuário");
+				}	
+			} catch(NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(null, "Código enviado não é número.", "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
+			}
+			
 		} catch (GeneralErrorException gee) {
 			
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Login de Usuário", JOptionPane.ERROR_MESSAGE);

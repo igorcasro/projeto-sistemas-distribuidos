@@ -126,16 +126,25 @@ public class RemoverCadastro extends JFrame {
 		System.out.println("Server sent: " + jsonRetorno);
 		Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
 		
-		if(retorno.getCodigo().equals(200)) {
+		if(retorno == null) {
+			throw new GeneralErrorException("Retorno nulo!");
+		}
+		
+		try {
+			if(retorno.getCodigo().equals(200)) {
 			
 			JOptionPane.showMessageDialog(null, "Usuário removido com sucesso.", "Remoção de Usuário", JOptionPane.INFORMATION_MESSAGE);
 			this.dispose();
 			clientLoggedWindow.dispose();
 			clientUnloggedWindow.setVisible(true);	
-		} else {
-			throw new GeneralErrorException("Erro ao remover usuário");
+			} else {
+				throw new GeneralErrorException("Erro ao remover usuário");
+			
+			} 
+		} catch(NumberFormatException nfe) {
+			JOptionPane.showMessageDialog(null, "Código enviado não é número.", "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
+		}
 		
-		} 
 		
 	}
 	

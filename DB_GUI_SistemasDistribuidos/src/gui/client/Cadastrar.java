@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -19,7 +20,6 @@ import com.google.gson.Gson;
 import entities.Retorno;
 import entities.Usuario;
 import exceptions.GeneralErrorException;
-import javax.swing.JPasswordField;
 
 public class Cadastrar extends JFrame {
 
@@ -126,13 +126,23 @@ public class Cadastrar extends JFrame {
 			String jsonRetorno = in.readLine();
 			
 			System.out.println("Server sent: " + jsonRetorno);
-			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
 			
-			if(retorno.getCodigo().equals(200)) {
-				JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso.", "Cadastro de Usuário", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				throw new GeneralErrorException("Erro ao cadastrar usuário");
+			Retorno retorno = gson.fromJson(jsonRetorno, Retorno.class);
+				
+			if(retorno == null) {
+				throw new GeneralErrorException("Retorno nulo!");
 			}
+			
+			try {
+				if(retorno.getCodigo().equals(200)) {
+					JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso.", "Cadastro de Usuário", JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					throw new GeneralErrorException("Erro ao cadastrar usuário");
+				}	
+			} catch(NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(null, "Código enviado não é número.", "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
+			}
+			
 		
 		} catch(GeneralErrorException gee) {
 			JOptionPane.showMessageDialog(null, gee.getMessage(), "Cadastro de Usuário", JOptionPane.ERROR_MESSAGE);
